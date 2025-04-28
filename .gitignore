@@ -1,0 +1,11 @@
+# Ignorar la carpeta de configuracion local
+.terraform/
+
+# Ignorar archivos de estado
+*.tfstate
+*.tfstate.backup
+
+# Archivo de bloqueo
+.terraform.lock.hcl
+
+# Logs de errores
