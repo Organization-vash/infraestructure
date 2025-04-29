@@ -9,3 +9,5 @@
 .terraform.lock.hcl
 
 # Logs de errores
+
+# Ignora la carpeta .idea/
