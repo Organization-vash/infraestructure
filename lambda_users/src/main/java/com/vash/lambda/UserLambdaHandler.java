@@ -2,64 +2,59 @@ package com.vash.lambda;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vash.lambda.model.UserDTO;
 import com.vash.lambda.service.UserServiceLambda;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class UserLambdaHandler implements RequestHandler<Map<String, Object>, Object> {
+public class UserLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private final UserServiceLambda userService = new UserServiceLambda();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public Object handleRequest(Map<String, Object> input, Context context) {
-        Map<String, Object> response = new HashMap<>();
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
+    APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 
-        try {
-            // Extraer httpMethod
-            String httpMethod = (String) input.get("httpMethod");
+    try {
+        String httpMethod = event.getHttpMethod();
 
-            if (httpMethod == null) {
-                response.put("statusCode", 400);
-                response.put("body", "httpMethod es requerido");
-                return response;
-            }
+        switch (httpMethod) {
+            case "GET":
+                List<UserDTO> users = userService.getAll();
+                return response.withStatusCode(200)
+                               .withBody(objectMapper.writeValueAsString(users));
 
-            switch (httpMethod) {
-                case "GET":
-                    List<UserDTO> users = userService.getAll();
-                    response.put("statusCode", 200);
-                    response.put("body", objectMapper.writeValueAsString(users));
-                    break;
+            case "POST":
+                UserDTO newUser = objectMapper.readValue(event.getBody(), UserDTO.class);
+                UserDTO created = userService.createUser(newUser);
+                return response.withStatusCode(201)
+                               .withBody(objectMapper.writeValueAsString(created));
 
-                case "POST":
-                    String bodyJson = (String) input.get("body");
-                    if (bodyJson == null) {
-                        response.put("statusCode", 400);
-                        response.put("body", "El body es requerido");
-                        break;
-                    }
+            case "PUT":
+                String pathPut = event.getPathParameters() != null ? event.getPathParameters().get("id") : null;
+                if (pathPut == null) return response.withStatusCode(400).withBody("ID es requerido para actualizar");
+                UserDTO updateUser = objectMapper.readValue(event.getBody(), UserDTO.class);
+                UserDTO updated = userService.updateUser(Integer.parseInt(pathPut), updateUser);
+                return response.withStatusCode(200).withBody(objectMapper.writeValueAsString(updated));
 
-                    UserDTO user = objectMapper.readValue(bodyJson, UserDTO.class);
-                    UserDTO createdUser = userService.createUser(user);
-                    response.put("statusCode", 201);
-                    response.put("body", objectMapper.writeValueAsString(createdUser));
-                    break;
+            case "DELETE":
+                String pathDelete = event.getPathParameters() != null ? event.getPathParameters().get("id") : null;
+                if (pathDelete == null) return response.withStatusCode(400).withBody("ID es requerido para eliminar");
+                userService.delete(Integer.parseInt(pathDelete));
+                return response.withStatusCode(204).withBody("");
 
-                default:
-                    response.put("statusCode", 400);
-                    response.put("body", "Método no soportado: " + httpMethod);
-            }
-
-        } catch (Exception e) {
-            response.put("statusCode", 500);
-            response.put("body", "Error interno: " + e.getMessage());
+            default:
+                return response.withStatusCode(405)
+                               .withBody("Método no soportado: " + httpMethod);
         }
 
-        return response;
+    } catch (Exception e) {
+        return response.withStatusCode(500)
+                       .withBody("Error interno: " + e.getMessage());
+        }
     }
 }
