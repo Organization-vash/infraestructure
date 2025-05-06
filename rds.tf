@@ -17,6 +17,7 @@ resource "aws_db_instance" "postgres" {
   instance_class          = "db.t3.micro"
   allocated_storage       = 20
   storage_type            = "gp2"
+  db_name                 = "entelapp"
   username                = "entelupao"
   password                = "entelupao"  # ⚠️ Usa Secrets Manager en producción
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
