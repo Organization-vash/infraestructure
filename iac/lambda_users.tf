@@ -33,7 +33,7 @@ resource "aws_lambda_function" "user_lambda" {
 
 resource "null_resource" "upload_lambda_user" {
   provisioner "local-exec" {
-    command = "aws s3 cp ./lambda_users/target/lambda_users-1.0-SNAPSHOT.jar s3://entel-s3-bucket-lambda/lambdas/user-lambda.jar"
+    command = "aws s3 cp ../lambda_users/target/lambda_users-1.0-SNAPSHOT.jar s3://entel-s3-bucket-lambda/lambdas/user-lambda.jar"
   }
 
   depends_on = [aws_s3_bucket.lambda_bucket]

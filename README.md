@@ -53,7 +53,7 @@ El proyecto ha sido desarrollado aplicando **Infraestructura como Código (IaC)*
 
 ###  Diagrama del sistema
 
-![Flujo del sistema](DIAGRAMA.png)
+![Flujo del sistema](/iac/diagrama/DIAGRAMA.png)
 
 
 ## 📁 Estructura del Proyecto
