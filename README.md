@@ -60,46 +60,41 @@ El proyecto ha sido desarrollado aplicando **Infraestructura como Código (IaC)*
 ## 📁 Estructura del Proyecto
 ```markdown
 
-📁 raíz del proyecto  
-├── 📄 main.tf — orquestador principal  
-├── 📄 network.tf — definición de red VPC y subredes  
-├── 📄 security_group.tf — configuración de SGs para Lambda y RDS  
-├── 📄 api_gateway.tf — definición de endpoints HTTP  
-├── 📄 cloudfront.tf — distribución del frontend  
-├── 📄 s3.tf — bucket para frontend estático  
-├── 📄 s3_lambdas.tf — bucket para despliegue de JARs  
-├── 📄 iam_roles.tf — roles de ejecución para Lambda  
-├── 📄 lambda_users.tf — función Lambda de usuarios  
-├── 📄 rds.tf — configuración de base de datos PostgreSQL  
-├── 📄 deploy_frontend.tf — despliegue automático del frontend  
-├── 📄 outputs.tf — exportación de valores clave  
-├── 📄 variables.tf — parámetros reutilizables  
-├── 📄 terraform.tfstate  
-├── 📄 terraform.tfstate.backup  
-├── 📄 README.md  
-├── 📄 estructura.txt — vista generada del árbol de carpetas  
-
-📁 lambda_users  
-├── 📄 pom.xml — configuración Maven del proyecto  
-└── 📁 src  
-    └── 📁 main  
-        └── 🧠 Lógica backend en Java (Spring Boot para Lambda)  
-
-📁 front (Frontend Angular 18)  
-├── 📄 angular.json — configuración del proyecto  
-├── 📄 package.json / lock — dependencias  
-├── 📄 tsconfig*.json — configuración de compilación  
-├── 📄 proxy.conf.json — proxy para desarrollo  
-├── 📁 dist  
-│   └── 📁 gestion-servicio-frontend — build de producción  
-├── 📁 public  
-│   ├── 🖼️ Entel_logo_pe.png  
-│   ├── 🖼️ chat-box.jpg  
-│   ├── 🖼️ entellogo.png  
-│   ├── 🖼️ favicon.ico  
-│   └── 🖼️ logo_entel.jpg  
-└── 📁 src  
-    ├── 📁 app — módulos y componentes Angular  
-    ├── 📄 index.html  
-    ├── 📄 main.ts  
-    └── 📄 styles.css  
+📦 organization-vash-infraestructure/
+├── 📄 README.md
+├── 📁 iac/
+│   ├── 📄 api_gateway.tf
+│   ├── 📄 cloudfront.tf
+│   ├── 📄 deploy_frontend.tf
+│   ├── 📄 iam_roles.tf
+│   ├── 📄 lambda_users.tf
+│   ├── 📄 main.tf
+│   ├── 📄 network.tf
+│   ├── 📄 outputs.tf
+│   ├── 📄 rds.tf
+│   ├── 📄 s3.tf
+│   ├── 📄 s3_lambdas.tf
+│   ├── 📄 security_group.tf
+│   ├── 📄 variables.tf
+│   ├── 📄 .gitignore
+│   ├── 📁 diagrama/
+│   └── 📁 front/
+├── 📁 lambda_users/
+│   ├── 📄 pom.xml
+│   ├── 📄 .gitignore
+│   ├── 📁 src/
+│   │   └── 📁 main/
+│   │       └── 📁 java/
+│   │           └── 📁 com/
+│   │               └── 📁 vash/
+│   │                   ├── 📁 db/
+│   │                   │   └── 📄 DatabaseInitializer.java
+│   │                   └── 📁 lambda/
+│   │                       ├── 📄 UserLambdaHandler.java
+│   │                       ├── 📁 model/
+│   │                       │   └── 📄 UserDTO.java
+│   │                       └── 📁 service/
+│   │                           ├── 📄 DatabaseConnection.java
+│   │                           └── 📄 UserServiceLambda.java
+│   └── 📁 .vscode/
+│       └── 📄 settings.json
