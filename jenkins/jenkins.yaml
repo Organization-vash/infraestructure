@@ -1,0 +1,29 @@
+jenkins:
+  systemMessage: "Jenkins listo"
+  numExecutors: 1
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "infra"
+          name: "infracode"
+          password: "infra123"
+
+  clouds:
+    - docker:
+        name: "docker"
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
+        templates:
+          - labelString: "terraform"
+            remoteFs: "/home/jenkins"
+            instanceCapStr: "5"
+            connector:
+              attach:
+                user: "root"
+            dockerTemplateBase:
+              image: "hashicorp/terraform:1.7.5"
+              tty: true
+              privileged: false
