@@ -7,11 +7,10 @@ RUN curl -fsSL -o terraform.zip https://releases.hashicorp.com/terraform/1.7.5/t
     mv terraform /usr/local/bin/ && \
     rm terraform.zip
 
-COPY install-plugins.sh /usr/local/bin/install-plugins.sh
-RUN chmod +x /usr/local/bin/install-plugins.sh
-
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN install-plugins.sh
+COPY install-plugins.sh /usr/local/bin/install-plugins.sh
+RUN chmod +x /usr/local/bin/install-plugins.sh && \
+    /usr/local/bin/install-plugins.sh
 
 COPY jenkins.yaml /var/jenkins_home/casc_configs/jenkins.yaml
 ENV CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/jenkins.yaml
