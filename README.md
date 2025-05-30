@@ -154,7 +154,7 @@ El proyecto ha sido desarrollado aplicando **Infraestructura como Código (IaC)*
 3. Verifica el despliegue en **Console Output** del pipeline.
 
 ---
-
+````markdown
 ## 📁 Estructura del Proyecto
 
 📁 organization-vash-infraestructure/
