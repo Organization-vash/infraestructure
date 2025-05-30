@@ -16,7 +16,7 @@ public class DatabaseInitializer {
                     "code VARCHAR(10) NOT NULL," +
                     "created TIMESTAMP NOT NULL," +
                     "service_id INT REFERENCES services(id)," +
-                    "customer_id INT," +
+                    "customer_name VARCHAR(100)," +
                     "attention_id INT UNIQUE" +
                     ")";
 

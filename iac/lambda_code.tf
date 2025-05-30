@@ -7,7 +7,10 @@ resource "aws_lambda_function" "code_lambda" {
   s3_bucket = "entel-s3-bucket-lambda"
   s3_key    = "lambdas/code-lambda.jar"
 
-  depends_on = [null_resource.upload_lambda_code, aws_lambda_function.service_lambda]
+  depends_on = [
+  null_resource.upload_lambda_code,
+  null_resource.invoke_service_lambda
+]
 
   memory_size = 512
   timeout     = 30
