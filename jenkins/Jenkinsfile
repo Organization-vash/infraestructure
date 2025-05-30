@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/pipeline-integration-backfront'
+        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/pipeline-back-front'
       }
     }
 
