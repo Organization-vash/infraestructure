@@ -10,6 +10,7 @@ import com.vash.lambda.service.UserServiceLambda;
 import com.vash.db.DatabaseInitializer;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -23,6 +24,12 @@ public class UserLambdaHandler implements RequestHandler<APIGatewayProxyRequestE
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+
+        response.withHeaders(Map.of(
+            "Access-Control-Allow-Origin", "*",
+            "Access-Control-Allow-Headers", "Content-Type",
+            "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE"
+        ));
 
         try {
             String httpMethod = event.getHttpMethod();
@@ -51,6 +58,9 @@ public class UserLambdaHandler implements RequestHandler<APIGatewayProxyRequestE
                     if (pathDelete == null) return response.withStatusCode(400).withBody("ID es requerido para eliminar");
                     userService.delete(Integer.parseInt(pathDelete));
                     return response.withStatusCode(204).withBody("");
+
+                case "OPTIONS":
+                    return response.withStatusCode(200).withBody("Preflight OK");
 
                 default:
                     return response.withStatusCode(405)
