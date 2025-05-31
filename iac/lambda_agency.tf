@@ -1,13 +1,13 @@
-resource "aws_lambda_function" "module_lambda" {
-  function_name = "module-lambda"
-  handler       = "com.vash.lambda.ModuleLambdaHandler::handleRequest"
+resource "aws_lambda_function" "agency_lambda" {
+  function_name = "agency-lambda"
+  handler       = "com.vash.lambda.AgencyLambdaHandler::handleRequest"
   runtime       = "java17"
   role          = aws_iam_role.lambda_role.arn
 
   s3_bucket = "entel-s3-bucket-lambda"
-  s3_key    = "lambdas/module-lambda.jar"
+  s3_key    = "lambdas/agency-lambda.jar"
 
-  depends_on = [null_resource.upload_lambda_module]
+  depends_on = [null_resource.upload_lambda_agency]
 
   memory_size = 512
   timeout     = 30
@@ -25,16 +25,16 @@ resource "aws_lambda_function" "module_lambda" {
     subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
-  
+
   tags = {
-    Name = "module-lambda-function"
-    Description = "Lambda para crear y eliminar modulos"
+    Name = "agency-lambda-function"
+    Description = "Lambda para CRUD de agencias"
   }
 }
 
-resource "null_resource" "upload_lambda_module" {
+resource "null_resource" "upload_lambda_agency" {
   provisioner "local-exec" {
-    command = "aws s3 cp ../lambda_modules/target/lambda_modules-1.0-SNAPSHOT.jar s3://entel-s3-bucket-lambda/lambdas/module-lambda.jar"
+    command = "aws s3 cp ../lambda_agency/target/lambda_agency-1.0-SNAPSHOT.jar s3://entel-s3-bucket-lambda/lambdas/agency-lambda.jar"
   }
 
   depends_on = [aws_s3_bucket.lambda_bucket]
