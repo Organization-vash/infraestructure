@@ -3,6 +3,7 @@ resource "aws_apigatewayv2_api" "main_api" {
   protocol_type = "HTTP"
 }
 
+# Integraciones
 resource "aws_apigatewayv2_integration" "user_integration" {
   api_id                 = aws_apigatewayv2_api.main_api.id
   integration_type       = "AWS_PROXY"
@@ -35,6 +36,15 @@ resource "aws_apigatewayv2_integration" "module_integration" {
   payload_format_version = "1.0"
 }
 
+resource "aws_apigatewayv2_integration" "agency_integration" {
+  api_id                 = aws_apigatewayv2_api.main_api.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.agency_lambda.invoke_arn
+  integration_method     = "POST"
+  payload_format_version = "1.0"
+}
+
+# Rutas
 # Users
 resource "aws_apigatewayv2_route" "user_route" {
   api_id    = aws_apigatewayv2_api.main_api.id
@@ -87,6 +97,20 @@ resource "aws_apigatewayv2_route" "module_by_id_route" {
   target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
 }
 
+# Agencies
+resource "aws_apigatewayv2_route" "agency_route" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "ANY /agencies"
+  target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "agency_by_id_route" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "ANY /agencies/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
+}
+
+# Permisos de ejecución
 resource "aws_lambda_permission" "allow_apigw_invoke_user" {
   statement_id  = "AllowExecutionFromAPIGatewayUser"
   action        = "lambda:InvokeFunction"
@@ -115,6 +139,14 @@ resource "aws_lambda_permission" "allow_apigw_invoke_module" {
   statement_id  = "AllowExecutionFromAPIGatewayModule"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.module_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.main_api.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "allow_apigw_invoke_agency" {
+  statement_id  = "AllowExecutionFromAPIGatewayAgency"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.agency_lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.main_api.execution_arn}/*/*"
 }
