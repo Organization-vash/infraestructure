@@ -26,9 +26,9 @@ resource "aws_lambda_function" "module_lambda" {
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
   
-
   tags = {
     Name = "module-lambda-function"
+    Description = "Lambda para crear y eliminar módulos (puestos de atención)"
   }
 }
 
