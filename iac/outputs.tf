@@ -22,3 +22,8 @@ output "code_lambda_endpoint" {
   description = "URL del endpoint de Lambda Code"
   value       = "${aws_apigatewayv2_api.main_api.api_endpoint}/codes"
 }
+
+output "module_lambda_endpoint" {
+  description = "URL del endpoint de Lambda Module"
+  value       = "${aws_apigatewayv2_api.main_api.api_endpoint}/modules"
+}
