@@ -18,10 +18,19 @@ pipeline {
 
     stage('Build Java Lambdas') {
       steps {
-        dir('lambda_users') {
+        dir('lambda_agency') {
+          sh 'mvn clean package'
+        }
+        dir('lambda_code') {
+          sh 'mvn clean package'
+        }
+        dir('lambda_modules') {
           sh 'mvn clean package'
         }
         dir('lambda_services') {
+          sh 'mvn clean package'
+        }
+        dir('lambda_users') {
           sh 'mvn clean package'
         }
       }
@@ -71,7 +80,7 @@ pipeline {
 
       post {
         failure {
-          echo '💥 terraform apply falló. Ejecutando terraform destroy automáticamente...'
+          echo '💥 La inyencción de la nueva URL falló. Ejecutando terraform destroy automáticamente...'
           dir("${env.TF_DIR}") {
             sh '''
               export AWS_ACCESS_KEY_ID=${AWS_CREDENTIALS_USR}
