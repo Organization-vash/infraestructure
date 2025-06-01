@@ -38,3 +38,12 @@ resource "null_resource" "upload_lambda_service" {
 
   depends_on = [aws_s3_bucket.lambda_bucket]
 }
+
+resource "null_resource" "invoke_service_lambda" {
+  provisioner "local-exec" {
+    command = "aws lambda invoke --function-name service-lambda --payload '{}' --region us-east-1 NUL"
+    interpreter = ["cmd", "/C"]
+  }
+
+  depends_on = [aws_lambda_function.service_lambda]
+}

@@ -17,3 +17,18 @@ output "service_lambda_endpoint" {
   description = "URL completa del endpoint de la Lambda Service"
   value       = "${aws_apigatewayv2_api.main_api.api_endpoint}/services"
 }
+
+output "code_lambda_endpoint" {
+  description = "URL del endpoint de Lambda Code"
+  value       = "${aws_apigatewayv2_api.main_api.api_endpoint}/codes"
+}
+
+output "module_lambda_endpoint" {
+  description = "URL del endpoint de Lambda Module"
+  value       = "${aws_apigatewayv2_api.main_api.api_endpoint}/modules"
+}
+
+output "agency_lambda_endpoint" {
+  description = "URL del endpoint de Lambda Agency"
+  value       = "${aws_apigatewayv2_api.main_api.api_endpoint}/agencies"
+}

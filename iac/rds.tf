@@ -19,13 +19,12 @@ resource "aws_db_instance" "postgres" {
   storage_type            = "gp2"
   db_name                 = "entelapp"
   username                = "entelupao"
-  password                = "entelupao"  # ⚠️ Usa Secrets Manager en producción
+  password                = "entelupao"
   db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids  = [aws_security_group.rds_sg.id]
   skip_final_snapshot     = true
-  publicly_accessible     = false   # 👈 importante: solo accesible dentro de VPC privada
-  multi_az                = false   # opcional para ambientes no productivos
-
+  publicly_accessible     = false
+  multi_az                = false
   tags = {
     Name = "Entel Postgres RDS"
   }
