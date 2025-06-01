@@ -44,69 +44,188 @@ resource "aws_apigatewayv2_integration" "agency_integration" {
   payload_format_version = "1.0"
 }
 
-# Rutas
-# Users
-resource "aws_apigatewayv2_route" "user_route" {
+# Rutas con users
+resource "aws_apigatewayv2_route" "user_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /users"
+  route_key = "GET /users"
   target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
 }
 
-resource "aws_apigatewayv2_route" "user_by_id_route" {
+resource "aws_apigatewayv2_route" "user_by_id_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /users/{id}"
+  route_key = "GET /users/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
 }
 
-# Services
-resource "aws_apigatewayv2_route" "service_route" {
+resource "aws_apigatewayv2_route" "user_route_post" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /services"
+  route_key = "POST /users"
+  target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "user_by_id_route_put" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "PUT /users/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "user_by_id_route_delete" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "DELETE /users/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "user_route_options" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "OPTIONS /users"
+  target    = "integrations/${aws_apigatewayv2_integration.user_integration.id}"
+}
+
+# Rutas para Servicios
+resource "aws_apigatewayv2_route" "service_route_get" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "GET /services"
   target    = "integrations/${aws_apigatewayv2_integration.service_integration.id}"
 }
 
-resource "aws_apigatewayv2_route" "service_by_id_route" {
+resource "aws_apigatewayv2_route" "service_by_id_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /services/{id}"
+  route_key = "GET /services/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.service_integration.id}"
 }
 
-# Codes
-resource "aws_apigatewayv2_route" "code_route" {
+resource "aws_apigatewayv2_route" "service_route_post" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /codes"
+  route_key = "POST /services"
+  target    = "integrations/${aws_apigatewayv2_integration.service_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "service_by_id_route_put" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "PUT /services/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.service_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "service_by_id_route_delete" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "DELETE /services/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.service_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "service_route_options" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "OPTIONS /services"
+  target    = "integrations/${aws_apigatewayv2_integration.service_integration.id}"
+}
+
+# Rutas para Code
+resource "aws_apigatewayv2_route" "code_route_get" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "GET /codes"
   target    = "integrations/${aws_apigatewayv2_integration.code_integration.id}"
 }
 
-resource "aws_apigatewayv2_route" "code_by_id_route" {
+resource "aws_apigatewayv2_route" "code_by_id_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /codes/{id}"
+  route_key = "GET /codes/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.code_integration.id}"
 }
 
-# Modules
-resource "aws_apigatewayv2_route" "module_route" {
+resource "aws_apigatewayv2_route" "code_route_post" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /modules"
+  route_key = "POST /codes"
+  target    = "integrations/${aws_apigatewayv2_integration.code_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "code_by_id_route_put" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "PUT /codes/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.code_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "code_by_id_route_delete" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "DELETE /codes/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.code_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "code_route_options" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "OPTIONS /codes"
+  target    = "integrations/${aws_apigatewayv2_integration.code_integration.id}"
+}
+
+# Rutas para Modulo
+resource "aws_apigatewayv2_route" "module_route_get" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "GET /modules"
   target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
 }
 
-resource "aws_apigatewayv2_route" "module_by_id_route" {
+resource "aws_apigatewayv2_route" "module_by_id_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /modules/{id}"
+  route_key = "GET /modules/{id}"
   target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
 }
 
-# Agencies
-resource "aws_apigatewayv2_route" "agency_route" {
+resource "aws_apigatewayv2_route" "module_route_post" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /agencies"
+  route_key = "POST /modules"
+  target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "module_by_id_route_put" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "PUT /modules/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "module_by_id_route_delete" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "DELETE /modules/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "module_route_options" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "OPTIONS /modules"
+  target    = "integrations/${aws_apigatewayv2_integration.module_integration.id}"
+}
+
+# Rutas para Agencia
+resource "aws_apigatewayv2_route" "agency_route_get" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "GET /agencies"
   target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
 }
 
-resource "aws_apigatewayv2_route" "agency_by_id_route" {
+resource "aws_apigatewayv2_route" "agency_by_id_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
-  route_key = "ANY /agencies/{id}"
+  route_key = "GET /agencies/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "agency_route_post" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "POST /agencies"
+  target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "agency_by_id_route_put" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "PUT /agencies/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "agency_by_id_route_delete" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "DELETE /agencies/{id}"
+  target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
+}
+
+resource "aws_apigatewayv2_route" "agency_route_options" {
+  api_id    = aws_apigatewayv2_api.main_api.id
+  route_key = "OPTIONS /agencies"
   target    = "integrations/${aws_apigatewayv2_integration.agency_integration.id}"
 }
 
