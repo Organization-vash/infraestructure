@@ -25,6 +25,12 @@ public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyReques
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 
+        response.withHeaders(Map.of(
+            "Access-Control-Allow-Origin", "*",
+            "Access-Control-Allow-Headers", "Content-Type",
+            "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE"
+        ));
+
         try {
             String method = event.getHttpMethod();
             Map<String, String> pathParams = event.getPathParameters();
@@ -67,6 +73,9 @@ public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyReques
 
                     service.delete(Integer.parseInt(pathParams.get("id")));
                     return response.withStatusCode(204).withBody("");
+
+                case "OPTIONS":
+                    return response.withStatusCode(200).withBody("Preflight OK");
 
                 default:
                     return response.withStatusCode(405)

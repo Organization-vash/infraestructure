@@ -24,6 +24,12 @@ public class CodeLambdaHandler implements RequestHandler<APIGatewayProxyRequestE
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 
+        response.withHeaders(Map.of(
+            "Access-Control-Allow-Origin", "*",
+            "Access-Control-Allow-Headers", "Content-Type",
+            "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE"
+        ));
+
         try {
             String httpMethod = event.getHttpMethod();
 
@@ -68,6 +74,9 @@ public class CodeLambdaHandler implements RequestHandler<APIGatewayProxyRequestE
             
                     service.delete(Integer.parseInt(pathDelete));
                     return response.withStatusCode(204).withBody("");
+
+                case "OPTIONS":
+                    return response.withStatusCode(200).withBody("Preflight OK");
             
                 default:
                     return response.withStatusCode(405)
