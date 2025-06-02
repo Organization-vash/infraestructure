@@ -10,6 +10,7 @@ import com.vash.lambda.model.ModuleDTO;
 import com.vash.lambda.service.ModuleServiceLambda;
 
 import java.util.List;
+import java.util.Map;
 
 public class ModuleLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
