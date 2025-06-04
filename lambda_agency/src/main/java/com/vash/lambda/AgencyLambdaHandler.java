@@ -16,9 +16,14 @@ import java.util.HashMap;
 public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     static {
-        DatabaseInitializer.initAgencyTable();
+        try {
+            System.out.println("Conectado a la base de datos (agencies)");
+            DatabaseInitializer.initAgencyTable();
+        } catch (Exception e) {
+            System.err.println("Error al conectarse a la base de datos (agencies): " + e.getMessage());
+        }
     }
-
+    
     private final AgencyServiceLambda service = new AgencyServiceLambda();
     private final ObjectMapper objectMapper = new ObjectMapper();
 

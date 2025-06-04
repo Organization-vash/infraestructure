@@ -16,7 +16,12 @@ import java.util.HashMap;
 public class UserLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     static {
-        DatabaseInitializer.initUserTable();
+        try {
+            System.out.println("Conectado a la base de datos (users)");
+            DatabaseInitializer.initUserTable();
+        } catch (Exception e) {
+            System.err.println("Error al conectarse a la base de datos (users): " + e.getMessage());
+        }
     }
 
     private final UserServiceLambda userService = new UserServiceLambda();
@@ -40,12 +45,6 @@ public class UserLambdaHandler implements RequestHandler<APIGatewayProxyRequestE
 
                 case "POST":
                     UserDTO newUser = objectMapper.readValue(event.getBody(), UserDTO.class);
-
-                    // ⚠️ Validación intencional para lanzar error si falta el nombre
-                    if (newUser.getName() == null || newUser.getName().isBlank()) {
-                        throw new RuntimeException("Nombre: Lanzando error para monitoreo.");
-                    }
-
                     UserDTO created = userService.createUser(newUser);
                     log("INFO", "Usuario creado", context, Map.of("id", created.getId()));
                     return response.withStatusCode(201)

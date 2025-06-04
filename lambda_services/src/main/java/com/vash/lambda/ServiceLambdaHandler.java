@@ -16,7 +16,12 @@ import java.util.Map;
 public class ServiceLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     static {
-        DatabaseInitializer.initServiceTable();
+        try {
+            System.out.println("Conectado a la base de datos (services)");
+            DatabaseInitializer.initServiceTable();
+        } catch (Exception e) {
+            System.err.println("Error al conectarse a la base de datos (services): " + e.getMessage());
+        }
     }
 
     private final ServiceServiceLambda service = new ServiceServiceLambda();

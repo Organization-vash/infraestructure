@@ -16,7 +16,12 @@ import java.util.Map;
 public class CodeLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     static {
-        DatabaseInitializer.initTicketCodeTable();
+        try {
+            System.out.println("Conectado a la base de datos (codes)");
+            DatabaseInitializer.initTicketCodeTable();
+        } catch (Exception e) {
+            System.err.println("Error al conectarse a la base de datos (codes): " + e.getMessage());
+        }
     }
 
     private final CodeServiceLambda service = new CodeServiceLambda();

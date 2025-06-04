@@ -14,9 +14,14 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ModuleLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
-
+    
     static {
-        DatabaseInitializer.initModulesTable();
+        try {
+            System.out.println("Conectado a la base de datos (modules)");
+            DatabaseInitializer.initModulesTable();
+        } catch (Exception e) {
+            System.err.println("Error al conectarse a la base de datos (modules): " + e.getMessage());
+        }
     }
 
     private final ModuleServiceLambda service = new ModuleServiceLambda();
