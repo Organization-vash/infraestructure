@@ -11,6 +11,7 @@ import com.vash.lambda.service.AgencyServiceLambda;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
@@ -28,6 +29,7 @@ public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyReques
         try {
             String method = event.getHttpMethod();
             Map<String, String> pathParams = event.getPathParameters();
+            log("INFO", "Método recibido: " + method, context, Map.of("path", event.getPath()));
 
             switch (method) {
                 case "GET":
@@ -35,13 +37,16 @@ public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyReques
                         int id = Integer.parseInt(pathParams.get("id"));
                         AgencyDTO agency = service.findById(id);
                         if (agency != null) {
+                            log("INFO", "Agencia encontrada", context, Map.of("id", id));
                             return response.withStatusCode(200)
                                     .withBody(objectMapper.writeValueAsString(agency));
                         } else {
+                            log("WARN", "Agencia no encontrada", context, Map.of("id", id));
                             return response.withStatusCode(404).withBody("Agencia no encontrada");
                         }
                     } else {
                         List<AgencyDTO> list = service.getAll();
+                        log("INFO", "Lista de agencias obtenida", context, Map.of("count", list.size()));
                         return response.withStatusCode(200)
                                 .withBody(objectMapper.writeValueAsString(list));
                     }
@@ -49,34 +54,54 @@ public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyReques
                 case "POST":
                     AgencyDTO newAgency = objectMapper.readValue(event.getBody(), AgencyDTO.class);
                     AgencyDTO created = service.createAgency(newAgency);
+                    log("INFO", "Agencia creada", context, Map.of("id", created.getId()));
                     return response.withStatusCode(201)
                             .withBody(objectMapper.writeValueAsString(created));
 
                 case "PUT":
-                    if (pathParams == null || pathParams.get("id") == null)
+                    if (pathParams == null || pathParams.get("id") == null) {
+                        log("WARN", "ID faltante", context, null);
                         return response.withStatusCode(400).withBody("ID es requerido para actualizar");
+                    }
 
                     AgencyDTO agencyToUpdate = objectMapper.readValue(event.getBody(), AgencyDTO.class);
                     AgencyDTO updated = service.updateAgency(Integer.parseInt(pathParams.get("id")), agencyToUpdate);
+                    log("INFO", "Agencia actualizada", context, Map.of("id", pathParams.get("id")));
                     return response.withStatusCode(200)
                             .withBody(objectMapper.writeValueAsString(updated));
 
                 case "DELETE":
-                    if (pathParams == null || pathParams.get("id") == null)
+                    if (pathParams == null || pathParams.get("id") == null) {
+                        log("WARN", "ID faltante", context, null);
                         return response.withStatusCode(400).withBody("ID es requerido para eliminar");
+                    }
 
                     service.delete(Integer.parseInt(pathParams.get("id")));
+                    log("INFO", "Agencia eliminada", context, Map.of("id", pathParams.get("id")));
                     return response.withStatusCode(204).withBody("");
 
                 default:
+                    log("ERROR", "Método no soportado", context, Map.of("method", method));
                     return response.withStatusCode(405)
                             .withBody("Método no soportado: " + method);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log("ERROR", "Excepción durante ejecución", context, Map.of("error", e.getMessage()));
             return response.withStatusCode(500)
                     .withBody("Error interno: " + e.getMessage());
         }
+    }
+
+    private void log(String level, String message, Context context, Map<String, Object> extra) {
+        Map<String, Object> log = new HashMap<>();
+        log.put("timestamp", System.currentTimeMillis());
+        log.put("level", level);
+        log.put("function", context.getFunctionName());
+        log.put("requestId", context.getAwsRequestId());
+        log.put("message", message);
+        if (extra != null)
+            log.putAll(extra);
+        System.out.println(new ObjectMapper().valueToTree(log));
     }
 }
