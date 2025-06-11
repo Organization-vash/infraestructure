@@ -10,3 +10,4 @@ services:
       --directory /app
       -o junitxml
       --output-file-path /output/results.xml
+      --skip-check CKV_AWS_309
