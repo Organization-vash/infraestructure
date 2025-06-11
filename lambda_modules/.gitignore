@@ -1,2 +1,4 @@
 # Ignorar target
 target/
+
+.vscode/
