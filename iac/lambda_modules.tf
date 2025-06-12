@@ -12,6 +12,8 @@ resource "aws_lambda_function" "module_lambda" {
   memory_size = 512
   timeout     = 30
 
+  reserved_concurrent_executions = 10
+
   environment {
     variables = {
       ENV         = "dev"
