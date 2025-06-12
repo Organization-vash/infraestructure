@@ -17,6 +17,19 @@ resource "aws_s3_bucket_public_access_block" "lambda_block" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_server_side_encryption_configuration" "lambda_sse" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = "alias/aws/s3"
+    }
+  }
+
+  depends_on = [aws_s3_bucket.lambda_bucket]
+}
+
 resource "aws_s3_bucket_notification" "lambda_eventbridge" {
   bucket      = aws_s3_bucket.lambda_bucket.id
   eventbridge = true
