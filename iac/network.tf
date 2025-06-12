@@ -80,3 +80,8 @@ resource "aws_route_table_association" "private_2_no_nat_assoc" {
   subnet_id      = aws_subnet.private_2.id
   route_table_id = aws_route_table.private_no_nat_rt.id
 }
+
+resource "aws_default_security_group" "restrict_default" {
+  vpc_id = aws_vpc.main.id
+  revoke_rules_on_delete = true
+}
