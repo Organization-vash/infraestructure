@@ -6,6 +6,36 @@ resource "aws_cloudfront_origin_access_control" "frontend_oac" {
   signing_protocol                  = "sigv4"
 }
 
+resource "aws_cloudfront_response_headers_policy" "security_headers" {
+  name = "entel-security-headers"
+
+  security_headers_config {
+    content_security_policy {
+      override                = true
+      content_security_policy = "default-src 'self';"
+    }
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+    referrer_policy {
+      referrer_policy = "no-referrer"
+      override        = true
+    }
+    xss_protection {
+      protection           = true
+      mode_block           = true
+      override             = true
+    }
+    strict_transport_security {
+      override                    = true
+      include_subdomains           = true
+      preload                      = true
+      access_control_max_age_sec   = 63072000
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "frontend_distribution" {
   enabled             = true
   default_root_object = "index.html"
@@ -23,6 +53,8 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     target_origin_id = "s3-frontend"
 
     viewer_protocol_policy = "redirect-to-https"
+
+    response_headers_policy_id   = aws_cloudfront_response_headers_policy.security_headers.id
 
     forwarded_values {
       query_string = false
