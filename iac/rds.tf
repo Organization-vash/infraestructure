@@ -10,6 +10,21 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
   }
 }
 
+resource "aws_db_parameter_group" "postgres_logging" {
+  name        = "entel-postgres-logging"
+  family      = "postgres16"
+  description = "Enable query logging for Postgres RDS"
+
+  parameter {
+    name  = "log_statement"
+    value = "all"
+  }
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "0"
+  }
+}
+
 resource "aws_db_instance" "postgres" {
   identifier              = "entel-postgres"
   engine                  = "postgres"
@@ -25,6 +40,10 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot     = true
   publicly_accessible     = false
   multi_az                = false
+
+  parameter_group_name         = aws_db_parameter_group.postgres_logging.name
+  enabled_cloudwatch_logs_exports = ["postgresql"]
+
   tags = {
     Name = "Entel Postgres RDS"
   }
