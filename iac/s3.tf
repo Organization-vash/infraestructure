@@ -18,3 +18,10 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
     key = "index.html"
   }
 }
+
+resource "aws_s3_bucket_notification" "frontend_eventbridge" {
+  bucket      = aws_s3_bucket.frontend.id
+  eventbridge = true
+
+  depends_on = [aws_s3_bucket.frontend]
+}
