@@ -37,6 +37,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers" {
 }
 
 resource "aws_cloudfront_distribution" "frontend_distribution" {
+  # checkov:skip=CKV2_AWS_42:No tenemos dominio.
   enabled             = true
   default_root_object = "index.html"
 
