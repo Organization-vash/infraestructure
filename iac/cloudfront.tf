@@ -40,6 +40,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   # checkov:skip=CKV2_AWS_42:No tenemos dominio.
   # checkov:skip=CKV2_AWS_47:ya se incluyó la regla AWSManagedRulesLog4jRuleSet en la WAF asociada
   # checkov:skip=CKV_AWS_310:la distribución CloudFront no requiere failover ya que el origen S3 está replicado y monitoreado por otras herramientas
+  # checkov:skip=CKV_AWS_86 reason="Access logging no es necesario en entorno de desarrollo"
   enabled             = true
   default_root_object = "index.html"
 
