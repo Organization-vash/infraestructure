@@ -13,7 +13,7 @@ resource "aws_lambda_function" "module_lambda" {
   timeout     = 30
 
   reserved_concurrent_executions = 10
-
+  kms_key_arn = aws_kms_key.lambda_env_vars.arn
   environment {
     variables = {
       ENV         = "dev"
