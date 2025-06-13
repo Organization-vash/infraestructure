@@ -44,6 +44,8 @@ resource "aws_db_instance" "postgres" {
   parameter_group_name         = aws_db_parameter_group.postgres_logging.name
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
+  copy_tags_to_snapshot             = true
+
   tags = {
     Name = "Entel Postgres RDS"
   }
