@@ -85,3 +85,19 @@ resource "aws_default_security_group" "restrict_default" {
   vpc_id = aws_vpc.main.id
   revoke_rules_on_delete = true
 }
+
+resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
+  name              = "/vpc/flow-logs/${aws_vpc.main.id}"
+  retention_in_days = 365
+
+  kms_key_id        = "alias/aws/logs"
+}
+
+resource "aws_flow_log" "main_vpc_flow" {
+  vpc_id               = aws_vpc.main.id
+  traffic_type         = "ALL"
+  log_destination      = aws_cloudwatch_log_group.vpc_flow_logs.arn
+  log_destination_type = "cloud-watch-logs"
+
+  depends_on = [aws_vpc.main]
+}
