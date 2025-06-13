@@ -38,6 +38,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers" {
 
 resource "aws_cloudfront_distribution" "frontend_distribution" {
   # checkov:skip=CKV2_AWS_42:No tenemos dominio.
+  # checkov:skip=CKV2_AWS_47:ya se incluyó la regla AWSManagedRulesLog4jRuleSet en la WAF asociada
   enabled             = true
   default_root_object = "index.html"
 
