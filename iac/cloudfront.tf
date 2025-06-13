@@ -81,7 +81,48 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   tags = {
     Name = "FrontendCloudFront"
   }
+  web_acl_id = aws_wafv2_web_acl.frontend_waf.arn
+
 }
+resource "aws_wafv2_web_acl" "frontend_waf" {
+  # checkov:skip=CKV2_AWS_31:no es necesario aumentar los log de waf para el funcionamiento de nuestra infraestructura
+  name        = "frontend-waf"
+  description = "WAF básica para CloudFront con protección Log4j"
+  scope       = "CLOUDFRONT"
+
+  default_action {
+    allow {}
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "frontend-waf"
+    sampled_requests_enabled   = true
+  }
+
+  rule {
+    name     = "AWS-AWSManagedRulesLog4jRuleSet"
+    priority = 1
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesLog4jRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "log4j-rule"
+      sampled_requests_enabled   = true
+    }
+  }
+}
+
 
 resource "aws_s3_bucket_policy" "only_cloudfront" {
   bucket = aws_s3_bucket.frontend.id
