@@ -56,3 +56,16 @@ resource "aws_s3_bucket_versioning" "frontend_versioning" {
     status = "Enabled"
   }
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "frontend_lifecycle" {
+  bucket = aws_s3_bucket.frontend.id
+
+  rule {
+    id     = "cleanup-incomplete-multipart"
+    status = "Enabled"
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+  }
+}
