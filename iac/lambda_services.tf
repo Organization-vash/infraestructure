@@ -31,6 +31,10 @@ resource "aws_lambda_function" "service_lambda" {
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
 
+  tracing_config {
+    mode = "Active"
+  }
+
   tags = {
     Name = "service-lambda-function"
   }
