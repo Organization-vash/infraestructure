@@ -37,3 +37,11 @@ resource "aws_s3_bucket_notification" "lambda_eventbridge" {
 
   depends_on = [aws_s3_bucket.lambda_bucket]
 }
+
+resource "aws_s3_bucket_versioning" "lambda_versioning" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
