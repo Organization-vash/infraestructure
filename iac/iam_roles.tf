@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "lambda_role" {
   name = "lambda-execution-role"
 
@@ -29,7 +31,7 @@ resource "aws_iam_role_policy" "lambda_logs_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = "*"
+        Resource = "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/*"
       }
     ]
   })
@@ -54,7 +56,7 @@ resource "aws_iam_role_policy" "lambda_vpc_permissions" {
           "ec2:DescribeNetworkInterfaces",
           "ec2:DeleteNetworkInterface"
         ],
-        Resource = "*"
+        Resource = "arn:aws:ec2:${var.region}:${data.aws_caller_identity.current.account_id}:network-interface/*"
       }
     ]
   })
