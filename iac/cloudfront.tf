@@ -35,7 +35,8 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 
   restrictions {
     geo_restriction {
-      restriction_type = "none"
+      restriction_type = "blacklist"
+      locations        = ["CN", "RU", "KP", "IR"]
     }
   }
 
