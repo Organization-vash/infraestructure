@@ -88,6 +88,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 }
 resource "aws_wafv2_web_acl" "frontend_waf" {
   # checkov:skip=CKV2_AWS_31:no es necesario aumentar los log de waf para el funcionamiento de nuestra infraestructura
+  # checkov:skip=CKV_AWS_192 reason="No se aplica bloqueo en entorno de desarrollo, solo monitoreo"
   name        = "frontend-waf"
   description = "WAF básica para CloudFront con protección Log4j"
   scope       = "CLOUDFRONT"
