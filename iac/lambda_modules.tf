@@ -27,6 +27,11 @@ resource "aws_lambda_function" "module_lambda" {
     subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
+
+  tracing_config {
+    mode = "Active"
+  }
+
   dead_letter_config {
     target_arn = aws_sqs_queue.lambda_dlq.arn
   }
