@@ -27,7 +27,9 @@ resource "aws_lambda_function" "module_lambda" {
     subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
   }
-  
+  dead_letter_config {
+    target_arn = aws_sqs_queue.lambda_dlq.arn
+  }
   tags = {
     Name = "module-lambda-function"
     Description = "Lambda para crear y eliminar modulos"
