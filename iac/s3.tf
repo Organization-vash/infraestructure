@@ -48,3 +48,11 @@ resource "aws_s3_bucket_notification" "frontend_eventbridge" {
 
   depends_on = [aws_s3_bucket.frontend]
 }
+
+resource "aws_s3_bucket_versioning" "frontend_versioning" {
+  bucket = aws_s3_bucket.frontend.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
