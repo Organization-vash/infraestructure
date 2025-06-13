@@ -49,6 +49,7 @@ resource "aws_db_instance" "postgres" {
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   copy_tags_to_snapshot             = true
+  monitoring_interval = 60
 
   tags = {
     Name = "Entel Postgres RDS"
