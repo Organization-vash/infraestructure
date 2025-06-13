@@ -43,6 +43,7 @@ resource "aws_db_instance" "postgres" {
 
    auto_minor_version_upgrade = true
    iam_database_authentication_enabled = true
+   storage_encrypted                      = true
 
   deletion_protection = true
   parameter_group_name         = aws_db_parameter_group.postgres_logging.name
