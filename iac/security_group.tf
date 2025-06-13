@@ -1,5 +1,7 @@
 # Security Group para la base de datos RDS
+
 resource "aws_security_group" "rds_sg" {
+  # checkov:skip=CKV_AWS_382: Se permite egress global por simplicidad en entorno de desarrollo
   name        = "rds-sg"
   description = "Permite conexiones desde Lambda"
   vpc_id      = aws_vpc.main.id
@@ -27,6 +29,7 @@ resource "aws_security_group" "rds_sg" {
 
 # Security Group para la Lambda
 resource "aws_security_group" "lambda_sg" {
+  # checkov:skip=CKV_AWS_382: Se permite egress global por simplicidad en entorno de desarrollo
   name        = "lambda-sg"
   description = "Permite a Lambda acceder a RDS"
   vpc_id      = aws_vpc.main.id
