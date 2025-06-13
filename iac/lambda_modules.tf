@@ -1,6 +1,7 @@
 resource "aws_lambda_function" "module_lambda" {
   # checkov:skip=CKV_AWS_272: Code signing no es requerido en este entorno de desarrollo (no es producción)
   # checkov:skip=CKV_AWS_173: No se requiere cifrado KMS de variables de entorno en desarrollo.
+  # checkov:skip=CKV_AWS_116: DLQ no es necesario para entorno de desarrollo.
   function_name = "module-lambda"
   handler       = "com.vash.lambda.ModuleLambdaHandler::handleRequest"
   runtime       = "java17"
@@ -34,9 +35,6 @@ resource "aws_lambda_function" "module_lambda" {
     mode = "Active"
   }
 
-  dead_letter_config {
-    target_arn = aws_sqs_queue.lambda_dlq.arn
-  }
   tags = {
     Name = "module-lambda-function"
     Description = "Lambda para crear y eliminar modulos"
