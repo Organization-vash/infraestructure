@@ -12,6 +12,11 @@ resource "aws_lambda_function" "service_lambda" {
   memory_size = 512
   timeout     = 30
   kms_key_arn = aws_kms_key.lambda_env_vars.arn
+
+  dead_letter_config {
+    target_arn = aws_sqs_queue.lambda_dlq.arn
+  }
+
   environment {
     variables = {
       ENV         = "dev"
