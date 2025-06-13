@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "frontend" {
+  # checkov:skip=CKV_AWS_144:No necesitamos un bucket destino en otra región.
   bucket        = "entel-s3-bucket-21"
   force_destroy = true
 
