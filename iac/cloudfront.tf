@@ -41,6 +41,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {
