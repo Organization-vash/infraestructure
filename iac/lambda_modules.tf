@@ -14,6 +14,7 @@ resource "aws_lambda_function" "module_lambda" {
 
   reserved_concurrent_executions = 10
   kms_key_arn = aws_kms_key.lambda_env_vars.arn
+  code_signing_config_arn = aws_lambda_code_signing_config.lambda_csc.arn
   environment {
     variables = {
       ENV         = "dev"
