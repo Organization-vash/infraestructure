@@ -29,6 +29,8 @@ resource "aws_db_parameter_group" "postgres_logging" {
 resource "aws_db_instance" "postgres" {
   # checkov:skip=CKV_AWS_157 : Multi-AZ no es necesario para este entorno de desarrollo.
   # checkov:skip=CKV2_AWS_69 reason="Backups no son requeridos en este entorno de desarrollo"
+  # checkov:skip=CKV_AWS_118 : Enhanced monitoring no es requerido en desarrollo para evitar costos.
+
   identifier              = "entel-postgres"
   engine                  = "postgres"
   engine_version          = "16.7"
@@ -54,7 +56,6 @@ resource "aws_db_instance" "postgres" {
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   copy_tags_to_snapshot             = true
-  monitoring_interval = 60
 
   tags = {
     Name = "Entel Postgres RDS"
