@@ -2,6 +2,7 @@ resource "aws_lambda_function" "user_lambda" {
   # checkov:skip=CKV_AWS_272: Code signing no es requerido en este entorno de desarrollo (no es producción)
   # checkov:skip=CKV_AWS_173: No se requiere cifrado KMS de variables de entorno en desarrollo.
   # checkov:skip=CKV_AWS_116: DLQ no es necesario para entorno de desarrollo.
+  # checkov:skip=CKV_AWS_50: X-Ray tracing no es necesario para entorno de desarrollo.
   function_name = "user-lambda"
   handler       = "com.vash.lambda.UserLambdaHandler::handleRequest"
   runtime       = "java17"
@@ -28,10 +29,6 @@ resource "aws_lambda_function" "user_lambda" {
   vpc_config {
     subnet_ids         = [aws_subnet.private_1.id, aws_subnet.private_2.id]
     security_group_ids = [aws_security_group.lambda_sg.id]
-  }
-
-  tracing_config {
-    mode = "Active"
   }
 
   tags = {
