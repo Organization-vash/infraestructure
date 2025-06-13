@@ -35,6 +35,7 @@ resource "aws_subnet" "private_2" {
 }
 
 resource "aws_subnet" "nat_subnet" {
+  # checkov:skip=CKV_AWS_130:El NAT Subnet requiere IP pública para pruebas en entorno no productivo
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.100.0/24"
   availability_zone       = "us-east-1a"
