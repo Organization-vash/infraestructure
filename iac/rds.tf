@@ -41,6 +41,8 @@ resource "aws_db_instance" "postgres" {
   publicly_accessible     = false
   multi_az                = false
 
+   auto_minor_version_upgrade = true
+
   parameter_group_name         = aws_db_parameter_group.postgres_logging.name
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
