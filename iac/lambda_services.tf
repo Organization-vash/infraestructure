@@ -12,7 +12,7 @@ resource "aws_lambda_function" "service_lambda" {
   memory_size = 512
   timeout     = 30
   kms_key_arn = aws_kms_key.lambda_env_vars.arn
-
+  code_signing_config_arn = aws_lambda_code_signing_config.lambda_csc.arn
   dead_letter_config {
     target_arn = aws_sqs_queue.lambda_dlq.arn
   }
