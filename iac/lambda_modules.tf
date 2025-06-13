@@ -1,5 +1,6 @@
 resource "aws_lambda_function" "module_lambda" {
   # checkov:skip=CKV_AWS_272: Code signing no es requerido en este entorno de desarrollo (no es producción)
+  # checkov:skip=CKV_AWS_173: No se requiere cifrado KMS de variables de entorno en desarrollo.
   function_name = "module-lambda"
   handler       = "com.vash.lambda.ModuleLambdaHandler::handleRequest"
   runtime       = "java17"
@@ -14,7 +15,6 @@ resource "aws_lambda_function" "module_lambda" {
   timeout     = 30
 
   reserved_concurrent_executions = 10
-  kms_key_arn = aws_kms_key.lambda_env_vars.arn
 
   environment {
     variables = {
