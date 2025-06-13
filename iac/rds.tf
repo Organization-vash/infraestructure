@@ -28,6 +28,7 @@ resource "aws_db_parameter_group" "postgres_logging" {
 
 resource "aws_db_instance" "postgres" {
   # checkov:skip=CKV_AWS_157 : Multi-AZ no es necesario para este entorno de desarrollo.
+  # checkov:skip=CKV2_AWS_69 reason="Backups no son requeridos en este entorno de desarrollo"
   identifier              = "entel-postgres"
   engine                  = "postgres"
   engine_version          = "16.7"
