@@ -45,3 +45,16 @@ resource "aws_s3_bucket_versioning" "lambda_versioning" {
     status = "Enabled"
   }
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "lambda_lifecycle" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+
+  rule {
+    id     = "cleanup-incomplete-multipart"
+    status = "Enabled"
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+  }
+}
