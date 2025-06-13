@@ -299,9 +299,29 @@ resource "aws_lambda_permission" "allow_apigw_invoke_agency" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.main_api.execution_arn}/*/*"
 }
+resource "aws_cloudwatch_log_group" "apigw_logs" {
+  # checkov:skip=CKV_AWS_158 reason: no se requiere cifrado KMS en entorno de desarrollo
+  name              = "/aws/apigateway/v2"
+  retention_in_days = 365
+}
 
 resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.main_api.id
   name        = "$default"
   auto_deploy = true
+
+    access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigw_logs.arn
+    format = jsonencode({
+      requestId               = "$context.requestId",
+      ip                      = "$context.identity.sourceIp",
+      requestTime             = "$context.requestTime",
+      httpMethod              = "$context.httpMethod",
+      routeKey                = "$context.routeKey",
+      status                  = "$context.status",
+      protocol                = "$context.protocol",
+      responseLength          = "$context.responseLength"
+    })
+  }
+
 }
