@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "lambda_bucket" {
   # checkov:skip=CKV_AWS_144:No necesitamos un bucket destino en otra región.
+  # checkov:skip=CKV_AWS_18:No es necesario habilitar access logging en el bucket de lambdas, solo requerimos logs para las funciones, las peticiones llegan al api gateway.
   bucket        = "entel-s3-bucket-lambda"
   force_destroy = true
 
