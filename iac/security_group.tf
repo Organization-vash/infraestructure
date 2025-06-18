@@ -1,5 +1,3 @@
-# Security Group para la base de datos RDS
-
 resource "aws_security_group" "rds_sg" {
   # checkov:skip=CKV_AWS_382: Se permite egress global por simplicidad en entorno de desarrollo
   name        = "rds-sg"
@@ -27,7 +25,6 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-# Security Group para la Lambda
 resource "aws_security_group" "lambda_sg" {
   # checkov:skip=CKV_AWS_382: Se permite egress global por simplicidad en entorno de desarrollo
   name        = "lambda-sg"

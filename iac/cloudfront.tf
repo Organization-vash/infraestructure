@@ -47,8 +47,10 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   default_root_object = "index.html"
 
   origin {
-    domain_name = aws_s3_bucket.frontend.website_endpoint
+    domain_name = aws_s3_bucket.frontend.bucket_regional_domain_name
     origin_id   = "s3-frontend"
+
+    origin_access_control_id = aws_cloudfront_origin_access_control.frontend_oac.id
   }
 
   default_cache_behavior {
@@ -63,17 +65,18 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
         forward = "none"
       }
     }
+  }
 
-    custom_error_response {
-      error_code         = 403
-      response_code      = 200
-      response_page_path = "/index.html"
-    }
-    custom_error_response {
-      error_code         = 404
-      response_code      = 200
-      response_page_path = "/index.html"
-    }
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
   }
 
   restrictions {

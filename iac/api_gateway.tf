@@ -3,7 +3,6 @@ resource "aws_apigatewayv2_api" "main_api" {
   protocol_type = "HTTP"
 }
 
-# Integraciones
 resource "aws_apigatewayv2_integration" "user_integration" {
   api_id                 = aws_apigatewayv2_api.main_api.id
   integration_type       = "AWS_PROXY"
@@ -44,7 +43,6 @@ resource "aws_apigatewayv2_integration" "agency_integration" {
   payload_format_version = "1.0"
 }
 
-# Rutas con users
 resource "aws_apigatewayv2_route" "user_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
   route_key = "GET /users"
@@ -87,7 +85,6 @@ resource "aws_apigatewayv2_route" "user_route_options" {
   authorization_type = "NONE"
 }
 
-# Rutas para Servicios
 resource "aws_apigatewayv2_route" "service_route_get" {
   api_id    = aws_apigatewayv2_api.main_api.id
   route_key = "GET /services"
