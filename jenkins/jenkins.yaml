@@ -1,29 +1,88 @@
 jenkins:
-  systemMessage: "Jenkins listo"
-  numExecutors: 1
+  systemMessage: "Jenkins configurado automáticamente por JCasC. ¡Bienvenido!"
+  numExecutors: 2
+  remotingSecurity:
+    enabled: true
 
   securityRealm:
     local:
       allowsSignup: false
       users:
-        - id: "infra"
-          name: "infracode"
-          password: "infra123"
+        - id: admin
+          name: Administrator
+          password: admin123
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
 
   clouds:
     - docker:
-        name: "docker"
+        name: "docker-cloud"
         dockerApi:
           dockerHost:
-            uri: "unix:///var/run/docker.sock"
+            uri: "tcp://docker-agent:50000"
         templates:
-          - labelString: "terraform"
-            remoteFs: "/home/jenkins"
-            instanceCapStr: "5"
+          - labelString: "entel"
+            name: "entel-agent-template"
+            remoteFs: "/home/jenkins/agent"
+            instanceCapStr: "1"
+            mode: NORMAL
+            retentionStrategy:
+              idleMinutes: 10
             connector:
-              attach:
-                user: "root"
+              jnlp:
+                user: "jenkins"
             dockerTemplateBase:
-              image: "hashicorp/terraform:1.7.5"
-              tty: true
-              privileged: false
+              image: chex19/jenkins-agent:lts-custom
+
+unclassified:
+  location:
+    url: "http://jenkins-master:8080"
+
+credentials:
+  system:
+    domainCredentials:
+      - domain:
+          name: "_"
+          description: "Global credentials"
+        credentials:
+          - usernamePassword:
+              id: "aws-credentials"
+              username: "${AWS_ACCESS_KEY_ID}"
+              password: "${AWS_SECRET_ACCESS_KEY}"
+              description: "AWS credentials for Terraform and S3/Lambda deploy"
+          - string:
+              id: "aws-session-token"
+              secret: "${AWS_SESSION_TOKEN}"
+              description: "AWS session token"
+
+jobs:
+  - script: >
+      freeStyleJob('seed-job') {
+        description('Job que ejecuta el DSL para crear los demás pipelines')
+        steps {
+          dsl {
+            text("""
+              pipelineJob('entel-ci-pipeline') {
+                description('Pipeline CI/CD para el proyecto Entel (Java Lambdas, Terraform, Angular Frontend)')
+                definition {
+                  cpsScm {
+                    scm {
+                      git {
+                        remote {
+                          url('https://github.com/Organization-vash/infraestructure.git')
+                        }
+                        branches('feature/pipeline-back-front')
+                      }
+                      scriptPath('jenkins/Jenkinsfile')
+                    }
+                  }
+                }
+              }
+              """)
+            sandbox: true
+            removeAction('IGNORE')
+          }
+        }
+      }

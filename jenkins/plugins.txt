@@ -7,3 +7,5 @@ terraform
 git
 credentials
 credentials-binding
+job-dsl
+ssh-slaves
