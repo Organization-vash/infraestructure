@@ -1,3 +1,4 @@
+# === iac/cloudfront.tf ===
 resource "aws_cloudfront_origin_access_control" "frontend_oac" {
   name                              = "frontend-oac"
   description                       = "Acceso de CloudFront a S3"
@@ -46,27 +47,32 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   default_root_object = "index.html"
 
   origin {
-    domain_name = aws_s3_bucket.frontend.bucket_regional_domain_name
+    domain_name = aws_s3_bucket.frontend.website_endpoint
     origin_id   = "s3-frontend"
-
-    origin_access_control_id = aws_cloudfront_origin_access_control.frontend_oac.id
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "s3-frontend"
-
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "s3-frontend"
     viewer_protocol_policy = "redirect-to-https"
-
-    response_headers_policy_id   = aws_cloudfront_response_headers_policy.security_headers.id
 
     forwarded_values {
       query_string = false
-
       cookies {
         forward = "none"
       }
+    }
+
+    custom_error_response {
+      error_code         = 403
+      response_code      = 200
+      response_page_path = "/index.html"
+    }
+    custom_error_response {
+      error_code         = 404
+      response_code      = 200
+      response_page_path = "/index.html"
     }
   }
 
@@ -79,15 +85,13 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
-    minimum_protocol_version = "TLSv1.2_2021"
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   tags = {
     Name = "FrontendCloudFront"
   }
-
 }
-
 
 resource "aws_s3_bucket_policy" "only_cloudfront" {
   bucket = aws_s3_bucket.frontend.id
