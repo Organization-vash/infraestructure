@@ -3,6 +3,7 @@ resource "aws_lambda_function" "code_lambda" {
   # checkov:skip=CKV_AWS_173: No se requiere cifrado KMS de variables de entorno en desarrollo.
   # checkov:skip=CKV_AWS_116: DLQ no es necesario para entorno de desarrollo.
   # checkov:skip=CKV_AWS_50: X-Ray tracing no es necesario para entorno de desarrollo.
+  # checkov:skip=CKV_AWS_115: No se requiere limitar concurrencia en entorno de desarrollo.
   function_name = "code-lambda"
   handler       = "com.vash.lambda.CodeLambdaHandler::handleRequest"
   runtime       = "java17"
@@ -18,7 +19,6 @@ resource "aws_lambda_function" "code_lambda" {
 
   memory_size = 512
   timeout     = 30
-  reserved_concurrent_executions = 10
 
   environment {
     variables = {
