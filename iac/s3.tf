@@ -2,6 +2,7 @@ resource "aws_s3_bucket" "frontend" {
   # checkov:skip=CKV_AWS_144:No necesitamos un bucket destino en otra región.
   # checkov:skip=CKV_AWS_18:No es necesario habilitar access logging en el bucket frontend, solo requerimos logs de las funciones.
   # checkov:skip=CKV2_AWS_6: CloudFront requiere politicas publicas
+  # checkov:skip=CKV_AWS_145: No requiere cifrado en entorno de desarrollo
   bucket        = "entel-s3-bucket-21"
   force_destroy = true
 
@@ -20,21 +21,6 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
   error_document {
     key = "index.html"
   }
-}
-
-
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_sse" {
-  bucket = aws_s3_bucket.frontend.id
-
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
-      kms_master_key_id = "alias/aws/s3"
-    }
-  }
-
-  depends_on = [aws_s3_bucket.frontend]
 }
 
 resource "aws_s3_bucket_notification" "frontend_eventbridge" {
