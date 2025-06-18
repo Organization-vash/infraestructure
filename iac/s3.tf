@@ -1,6 +1,7 @@
 resource "aws_s3_bucket" "frontend" {
   # checkov:skip=CKV_AWS_144:No necesitamos un bucket destino en otra región.
   # checkov:skip=CKV_AWS_18:No es necesario habilitar access logging en el bucket frontend, solo requerimos logs de las funciones.
+  # checkov:skip=CKV2_AWS_6: CloudFront requiere politicas publicas
   bucket        = "entel-s3-bucket-21"
   force_destroy = true
 
