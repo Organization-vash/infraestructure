@@ -1,4 +1,3 @@
-# === iac/cloudfront.tf ===
 resource "aws_cloudfront_origin_access_control" "frontend_oac" {
   name                              = "frontend-oac"
   description                       = "Acceso de CloudFront a S3"
@@ -13,8 +12,9 @@ resource "aws_cloudfront_response_headers_policy" "security_headers" {
   security_headers_config {
     content_security_policy {
       override                = true
-      content_security_policy = "default-src 'self';"
+      content_security_policy = "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;"
     }
+
     frame_options {
       frame_option = "DENY"
       override     = true
@@ -59,24 +59,14 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
     target_origin_id       = "s3-frontend"
     viewer_protocol_policy = "redirect-to-https"
 
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
+
     forwarded_values {
       query_string = false
       cookies {
         forward = "none"
       }
     }
-  }
-
-  custom_error_response {
-    error_code         = 403
-    response_code      = 200
-    response_page_path = "/index.html"
-  }
-
-  custom_error_response {
-    error_code         = 404
-    response_code      = 200
-    response_page_path = "/index.html"
   }
 
   restrictions {
