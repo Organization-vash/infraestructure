@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/pipeline-back-front'
+        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/jenkins'
       }
     }
 
@@ -110,8 +110,8 @@ pipeline {
 
     stage('Destroy Infra') {
       steps {
-        echo '⏳ Esperando 20 minutos antes de destruir la infraestructura...'
-        sleep time: 20, unit: 'MINUTES'
+        echo '⏳ Esperando 10 minutos antes de destruir la infraestructura...'
+        sleep time: 10, unit: 'MINUTES'
         dir("${env.TF_DIR}") {
           sh '''
             export AWS_ACCESS_KEY_ID=${AWS_CREDENTIALS_USR}

@@ -73,7 +73,7 @@ jobs:
                         remote {
                           url('https://github.com/Organization-vash/infraestructure.git')
                         }
-                        branches('feature/pipeline-back-front')
+                        branches('feature/jenkins')
                       }
                       scriptPath('jenkins/Jenkinsfile')
                     }
