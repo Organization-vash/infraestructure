@@ -12,7 +12,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers" {
   security_headers_config {
     content_security_policy {
       override                = true
-      content_security_policy = "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;"
+      content_security_policy = "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src *; script-src  'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;"
     }
 
     frame_options {

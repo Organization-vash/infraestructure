@@ -1,6 +1,14 @@
 resource "aws_apigatewayv2_api" "main_api" {
   name          = "main-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["GET","POST","PUT","DELETE","OPTIONS"]
+    allow_headers = ["*"]
+    expose_headers = ["*"]
+    max_age       = 3600
+  }
 }
 
 resource "aws_apigatewayv2_integration" "user_integration" {
