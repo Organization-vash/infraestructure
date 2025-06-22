@@ -1,1 +1,0 @@
-{"statusCode":500,"headers":{"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Methods":"OPTIONS,GET,POST,PUT,DELETE","Access-Control-Allow-Origin":"*"},"body":"Error interno: Cannot invoke \"String.hashCode()\" because \"<local5>\" is null"}
