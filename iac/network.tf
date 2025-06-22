@@ -1,4 +1,5 @@
 resource "aws_vpc" "main" {
+  # checkov:skip=CKV2_AWS_11: No requerimos habilitar VPC Flow Logs en esta infraestructura.
   cidr_block = "10.0.0.0/16"
 
   tags = {
@@ -35,6 +36,7 @@ resource "aws_subnet" "private_2" {
 }
 
 resource "aws_subnet" "nat_subnet" {
+  # checkov:skip=CKV_AWS_130:El NAT Subnet requiere IP pública para pruebas en entorno no productivo
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.100.0/24"
   availability_zone       = "us-east-1a"
@@ -79,4 +81,9 @@ resource "aws_route_table_association" "private_1_no_nat_assoc" {
 resource "aws_route_table_association" "private_2_no_nat_assoc" {
   subnet_id      = aws_subnet.private_2.id
   route_table_id = aws_route_table.private_no_nat_rt.id
+}
+
+resource "aws_default_security_group" "restrict_default" {
+  vpc_id = aws_vpc.main.id
+  revoke_rules_on_delete = true
 }

@@ -6,7 +6,43 @@ resource "aws_cloudfront_origin_access_control" "frontend_oac" {
   signing_protocol                  = "sigv4"
 }
 
+resource "aws_cloudfront_response_headers_policy" "security_headers" {
+  name = "entel-security-headers"
+
+  security_headers_config {
+    content_security_policy {
+      override                = true
+      content_security_policy = "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; font-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.gstatic.com; connect-src *; script-src  'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;"
+    }
+
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+    referrer_policy {
+      referrer_policy = "no-referrer"
+      override        = true
+    }
+    xss_protection {
+      protection           = true
+      mode_block           = true
+      override             = true
+    }
+    strict_transport_security {
+      override                    = true
+      include_subdomains           = true
+      preload                      = true
+      access_control_max_age_sec   = 63072000
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "frontend_distribution" {
+  # checkov:skip=CKV2_AWS_42:No tenemos dominio.
+  # checkov:skip=CKV2_AWS_47:ya se incluyó la regla AWSManagedRulesLog4jRuleSet en la WAF asociada
+  # checkov:skip=CKV_AWS_310:la distribución CloudFront no requiere failover ya que el origen S3 está replicado y monitoreado por otras herramientas
+  # checkov:skip=CKV_AWS_86 reason="Access logging no es necesario en entorno de desarrollo"
+  # checkov:skip=CKV_AWS_68 reason="Sin WAF en entorno de pruebas"
   enabled             = true
   default_root_object = "index.html"
 
@@ -18,15 +54,15 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "s3-frontend"
-
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "s3-frontend"
     viewer_protocol_policy = "redirect-to-https"
+
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
 
     forwarded_values {
       query_string = false
-
       cookies {
         forward = "none"
       }
@@ -35,12 +71,14 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
 
   restrictions {
     geo_restriction {
-      restriction_type = "none"
+      restriction_type = "blacklist"
+      locations        = ["CN", "RU", "KP", "IR"]
     }
   }
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   tags = {

@@ -1,0 +1,4 @@
+.idea/
+.vscode/
+iac/.terraform.tfstate.lock.info
+iac/NUL

@@ -1,3 +1,7 @@
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+
 jenkins:
   systemMessage: "Jenkins configurado automáticamente por JCasC. ¡Bienvenido!"
   numExecutors: 2
@@ -35,6 +39,10 @@ jenkins:
                 user: "jenkins"
             dockerTemplateBase:
               image: chex19/jenkins-agent:lts-custom
+              dnsHosts:
+                - "8.8.8.8"
+              extraHosts:
+                - "jenkins-master:172.18.0.2"
 
 unclassified:
   location:
@@ -73,7 +81,7 @@ jobs:
                         remote {
                           url('https://github.com/Organization-vash/infraestructure.git')
                         }
-                        branches('feature/pipeline-back-front')
+                        branches('feature/jenkins')
                       }
                       scriptPath('jenkins/Jenkinsfile')
                     }

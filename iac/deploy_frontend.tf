@@ -16,6 +16,5 @@ resource "null_resource" "deploy_frontend" {
 
     interpreter = ["bash", "-c"]
   }
-
   depends_on = [aws_s3_bucket_policy.only_cloudfront]
 }
