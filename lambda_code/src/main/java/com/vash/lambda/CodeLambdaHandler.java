@@ -9,6 +9,7 @@ import com.vash.db.DatabaseInitializer;
 import com.vash.lambda.model.CodeDTO;
 import com.vash.lambda.service.CodeServiceLambda;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,62 +34,89 @@ public class CodeLambdaHandler implements RequestHandler<APIGatewayProxyRequestE
 
         try {
             String httpMethod = event.getHttpMethod();
+            String path = event.getPath();
+            log("INFO", "Método recibido: " + httpMethod, context, Map.of("path", path));
 
             switch (httpMethod) {
                 case "GET":
                     String pathId = event.getPathParameters() != null ? event.getPathParameters().get("id") : null;
-            
+
                     if (pathId != null) {
                         CodeDTO one = service.getById(Integer.parseInt(pathId));
                         if (one != null) {
+                            log("INFO", "Ticket encontrado", context, Map.of("id", one.getId(), "code", one.getCode()));
                             return response.withStatusCode(200)
                                 .withBody(objectMapper.writeValueAsString(one));
                         } else {
+                            log("WARN", "Ticket no encontrado", context, Map.of("id", pathId));
                             return response.withStatusCode(404).withBody("Ticket no encontrado");
                         }
                     } else {
                         List<CodeDTO> allTickets = service.getAll();
+                        log("INFO", "Tickets obtenidos", context, Map.of("cantidad", allTickets.size()));
                         return response.withStatusCode(200)
                                 .withBody(objectMapper.writeValueAsString(allTickets));
                     }
-            
+
                 case "POST":
                     CodeDTO newTicket = objectMapper.readValue(event.getBody(), CodeDTO.class);
                     CodeDTO created = service.create(newTicket);
+                    log("INFO", "Ticket creado", context, Map.of("ticketCode", created.getCode(), "customer", created.getCustomerName()));
                     return response.withStatusCode(201)
                             .withBody(objectMapper.writeValueAsString(created));
-            
+
                 case "PUT":
                     String pathPut = event.getPathParameters() != null ? event.getPathParameters().get("id") : null;
-                    if (pathPut == null)
+                    if (pathPut == null) {
+                        log("WARN", "ID faltante para actualizar", context, null);
                         return response.withStatusCode(400).withBody("ID es requerido para actualizar");
-            
+                    }
+
                     CodeDTO updateTicket = objectMapper.readValue(event.getBody(), CodeDTO.class);
                     CodeDTO updated = service.update(Integer.parseInt(pathPut), updateTicket);
+                    log("INFO", "Ticket actualizado", context, Map.of("id", updated.getId()));
                     return response.withStatusCode(200)
                             .withBody(objectMapper.writeValueAsString(updated));
-            
+
                 case "DELETE":
                     String pathDelete = event.getPathParameters() != null ? event.getPathParameters().get("id") : null;
-                    if (pathDelete == null)
+                    if (pathDelete == null) {
+                        log("WARN", "ID faltante para eliminar", context, null);
                         return response.withStatusCode(400).withBody("ID es requerido para eliminar");
-            
+                    }
+
                     service.delete(Integer.parseInt(pathDelete));
+                    log("INFO", "Ticket eliminado", context, Map.of("id", pathDelete));
                     return response.withStatusCode(204).withBody("");
 
                 case "OPTIONS":
                     return response.withStatusCode(200).withBody("Preflight OK");
-            
+
                 default:
+                    log("ERROR", "Método no soportado", context, Map.of("method", httpMethod));
                     return response.withStatusCode(405)
                             .withBody("Método no soportado: " + httpMethod);
             }
-            
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log("ERROR", "Excepción durante ejecución", context, Map.of("error", e.getMessage()));
             return response.withStatusCode(500)
                     .withBody("Error interno: " + e.getMessage());
+        }
+    }
+
+    private void log(String level, String message, Context context, Map<String, Object> extra) {
+        try {
+            Map<String, Object> log = new HashMap<>();
+            log.put("timestamp", System.currentTimeMillis());
+            log.put("level", level);
+            log.put("function", context.getFunctionName());
+            log.put("requestId", context.getAwsRequestId());
+            log.put("message", message);
+            if (extra != null) log.putAll(extra);
+            System.out.println(new ObjectMapper().writeValueAsString(log));
+        } catch (Exception ex) {
+            System.out.println("Error al generar log estructurado: " + ex.getMessage());
         }
     }
 }

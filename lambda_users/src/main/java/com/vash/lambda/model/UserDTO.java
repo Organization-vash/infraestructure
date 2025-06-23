@@ -14,8 +14,6 @@ public class UserDTO {
 
     public UserDTO() {}
 
-    // Getters y Setters manuales
-
     public Integer getId() {
         return id;
     }
