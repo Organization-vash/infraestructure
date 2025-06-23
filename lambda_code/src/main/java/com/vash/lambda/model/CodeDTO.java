@@ -6,6 +6,7 @@ public class CodeDTO {
     private String customerName;
     private String serviceName;
     private String created;
+    private Boolean attended;
 
     public CodeDTO() {}
 
@@ -40,12 +41,20 @@ public class CodeDTO {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
-    
+
     public String getCreated() {
         return created;
     }
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public Boolean getAttended() {
+        return attended;
+    }
+
+    public void setAttended(Boolean attended) {
+        this.attended = attended;
     }
 }

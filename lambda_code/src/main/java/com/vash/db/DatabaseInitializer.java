@@ -17,7 +17,7 @@ public class DatabaseInitializer {
                     "created TIMESTAMP NOT NULL," +
                     "service_id INT REFERENCES services(id)," +
                     "customer_name VARCHAR(100)," +
-                    "attention_id INT UNIQUE" +
+                    "attended BOOLEAN DEFAULT FALSE" +
                     ")";
 
             stmt.executeUpdate(sql);
