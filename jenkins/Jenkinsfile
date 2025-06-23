@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/jenkins'
+        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/checkov'
       }
     }
 
@@ -35,7 +35,26 @@ pipeline {
         }
       }
     }
-
+    stage('Checkov - Análisis estático de Terraform') {
+      steps {
+        dir('checkov') {
+          sh '''
+            echo "Ejecutando Checkov con Docker Compose..."
+            docker compose run --rm checkov
+          '''
+        }
+      }
+      post {
+        always {
+          echo 'Publicando resultados de Checkov...'
+          junit 'checkov/results/results_junitxml.xml'
+        }
+        failure {
+          echo 'Checkov encontró problemas. Consulta los resultados en el reporte.'
+          error("Falló el análisis estático con Checkov")
+        }
+      }
+    }
     stage('Terraform Init & Apply') {
       steps {
         dir("${env.TF_DIR}") {
