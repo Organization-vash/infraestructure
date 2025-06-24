@@ -18,26 +18,26 @@ pipeline {
       }
     }
 
-    +  stage('Checkov - Análisis estático de Terraform') {
-+    environment {
-+      DOCKER_HOST = ''       
-+    }
+      stage('Checkov - Análisis estático de Terraform') {
+    environment {
+      DOCKER_HOST = ''       
+    }
      steps {
        dir('checkov') {
          echo "Ejecutando Checkov con Docker (sin DOCKER_HOST)…"
--        sh '''
--          docker compose up …
--        '''
-+        sh '''
-+          mkdir -p results                        
-+          docker run --rm \
-+            -v $WORKSPACE/iac:/tf                 
-+            -v $PWD/results:/results             
-+            bridgecrew/checkov:latest             
-+            checkov --directory /tf \
-+                   --output junitxml \
-+                   --output-file-path /results/results.xml
-+        '''
+        sh '''
+          docker compose up …
+        '''
+        sh '''
+          mkdir -p results                        
+          docker run --rm \
+            -v $WORKSPACE/iac:/tf                 
+            -v $PWD/results:/results             
+            bridgecrew/checkov:latest             
+            checkov --directory /tf \
+                   --output junitxml \
+                   --output-file-path /results/results.xml
+        '''
        }
      }
      post {
