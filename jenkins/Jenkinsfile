@@ -18,28 +18,39 @@ pipeline {
       }
     }
 
-    stage('Checkov - Análisis estático de Terraform') {
-      steps {
-        dir('checkov') {
-          echo "Ejecutando Checkov con Docker Compose..."
-          sh '''
-            docker compose up \
-              --abort-on-container-exit \
-              --exit-code-from checkov
-          '''
-        }
-      }
-      post {
-        always {
-          echo 'Publicando resultados de Checkov...'
-          junit 'checkov/results/results.xml'
-        }
-        failure {
-          echo 'Checkov encontró problemas. Consulta los resultados en el reporte.'
-          error "Falló el análisis estático con Checkov"
-        }
-      }
-    }
+    +  stage('Checkov - Análisis estático de Terraform') {
++    environment {
++      DOCKER_HOST = ''       
++    }
+     steps {
+       dir('checkov') {
+         echo "Ejecutando Checkov con Docker (sin DOCKER_HOST)…"
+-        sh '''
+-          docker compose up …
+-        '''
++        sh '''
++          mkdir -p results                        
++          docker run --rm \
++            -v $WORKSPACE/iac:/tf                 
++            -v $PWD/results:/results             
++            bridgecrew/checkov:latest             
++            checkov --directory /tf \
++                   --output junitxml \
++                   --output-file-path /results/results.xml
++        '''
+       }
+     }
+     post {
+       always {
+         echo 'Publicando resultados de Checkov…'
+         junit 'checkov/results/results.xml'      
+       }
+       failure {
+         echo 'Checkov encontró problemas. Consulta el reporte.'
+         error "Falló el análisis estático con Checkov"
+       }
+     }
+   }
 
     stage('Build Java Lambdas') {
       steps {
