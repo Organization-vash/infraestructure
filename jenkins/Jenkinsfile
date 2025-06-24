@@ -23,14 +23,14 @@ pipeline {
         dir('checkov') {
           sh '''
             echo "Ejecutando Checkov con Docker Compose..."
-            docker compose run --rm checkov
+            docker compose run --rm --network host checkov
           '''
         }
       }
       post {
         always {
           echo 'Publicando resultados de Checkov...'
-          junit 'checkov/results/results_junitxml.xml'
+          junit 'checkov/results/results.xml'
         }
         failure {
           echo 'Checkov encontró problemas. Consulta los resultados en el reporte.'
