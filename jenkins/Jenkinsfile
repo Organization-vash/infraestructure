@@ -21,7 +21,7 @@ pipeline {
   stage('Checkov - Análisis estático de Terraform') {
 
     agent {
-    docker {
+    dockerContainer {
       image 'docker:stable'
       args  '-v /var/run/docker.sock:/var/run/docker.sock'
       }
