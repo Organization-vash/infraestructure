@@ -21,9 +21,11 @@ pipeline {
     stage('Checkov - Análisis estático de Terraform') {
       steps {
         dir('checkov') {
+          echo "Ejecutando Checkov con Docker Compose..."
           sh '''
-            echo "Ejecutando Checkov con Docker Compose..."
-            docker compose run --rm --network host checkov
+            docker compose up \
+              --abort-on-container-exit \
+              --exit-code-from checkov
           '''
         }
       }
@@ -34,7 +36,7 @@ pipeline {
         }
         failure {
           echo 'Checkov encontró problemas. Consulta los resultados en el reporte.'
-          error("Falló el análisis estático con Checkov")
+          error "Falló el análisis estático con Checkov"
         }
       }
     }
