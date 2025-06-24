@@ -18,6 +18,14 @@ pipeline {
       }
     }
 
+  stage('Checkov Scan') {
+          steps {
+            dir('checkov') {
+              sh 'mkdir -p results'
+              sh 'docker compose run --rm checkov'
+            }
+          }
+        }
     stage('Build Java Lambdas') {
       steps {
         dir('lambda_agency') {
@@ -123,6 +131,12 @@ pipeline {
           '''
         }
       }
+    }
+  }
+    post {
+      always {
+      junit allowEmptyResults: true,
+            testResults: 'checkov/results/results_junitxml.xml'
     }
   }
 }
