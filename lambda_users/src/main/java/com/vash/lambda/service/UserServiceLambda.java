@@ -3,7 +3,6 @@ package com.vash.lambda.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.vash.lambda.model.UserDTO;
@@ -13,10 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserServiceLambda {
-
-    private final List<UserDTO> users = new ArrayList<>();
-    private int lastId = 0;
-
     public List<UserDTO> getAll() {
         List<UserDTO> userList = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();
