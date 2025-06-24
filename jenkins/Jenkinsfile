@@ -18,40 +18,14 @@ pipeline {
       }
     }
 
-  stage('Checkov - Análisis estático de Terraform') {
-
-    agent {
-    dockerContainer {
-      image 'docker:stable'
-      args  '-v /var/run/docker.sock:/var/run/docker.sock'
-      }
-    }
-     steps {
-       dir('checkov') {
-         echo "Ejecutando Checkov con Docker "
-        sh '''
-          mkdir -p results
-          docker run --rm \
-            -v "${WORKSPACE}/iac:/tf" \
-            -v "${WORKSPACE}/checkov/results:/results" \
-            bridgecrew/checkov:latest \
-            checkov --directory /tf \
-                   --output junitxml \
-                   --output-file-path /results/results.xml
-        '''
-       }
-     }
-     post {
-       always {
-         echo 'Publicando resultados de Checkov…'
-         junit 'checkov/results/results.xml'
-       }
-       failure {
-         echo 'Checkov encontró problemas. Consulta el reporte.'
-         error "Falló el análisis estático con Checkov"
-       }
-     }
-   }
+    stage('Checkov Scan') {
+          steps {
+            dir('checkov') {
+              sh 'mkdir -p results'
+              sh 'docker compose run --rm checkov'
+            }
+          }
+        }
 
     stage('Build Java Lambdas') {
       steps {
@@ -158,6 +132,12 @@ pipeline {
           '''
         }
       }
+    }
+  }
+  post {
+    always {
+      junit allowEmptyResults: true,
+            testResults: 'checkov/results/results_junitxml.xml'
     }
   }
 }
