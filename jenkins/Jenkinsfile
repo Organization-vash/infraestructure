@@ -20,17 +20,17 @@ pipeline {
 
   stage('Checkov - Análisis estático de Terraform') {
     environment {
-      DOCKER_HOST = ''       
+      DOCKER_HOST = ""
     }
      steps {
        dir('checkov') {
          echo "Ejecutando Checkov con Docker "
         sh '''
-          mkdir -p results                        
+          mkdir -p results
           docker run --rm \
-            -v $WORKSPACE/iac:/tf \                
-            -v $PWD/results:/results \             
-            bridgecrew/checkov:latest \            
+            -v "${WORKSPACE}/iac:/tf" \
+            -v "${WORKSPACE}/checkov/results:/results" \
+            bridgecrew/checkov:latest \
             checkov --directory /tf \
                    --output junitxml \
                    --output-file-path /results/results.xml
@@ -40,7 +40,7 @@ pipeline {
      post {
        always {
          echo 'Publicando resultados de Checkov…'
-         junit 'checkov/results/results.xml'      
+         junit 'checkov/results/results.xml'
        }
        failure {
          echo 'Checkov encontró problemas. Consulta el reporte.'
