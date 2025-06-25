@@ -20,7 +20,7 @@ pipeline {
 
     stage('Checkov Scan') {
       steps {
-        dir(iac) {
+        dir('iac') {
           sh "checkov -d ./iac/"
         }
       }
