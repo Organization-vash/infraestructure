@@ -28,14 +28,14 @@ pipeline {
               -o junitxml \
               --output-file-path results/results.xml
           '''
+          sh 'ls -R results'
         }
-        sh 'ls -l iac/results'
-        archiveArtifacts artifacts: 'iac/results/results.xml', fingerprint: true
+        archiveArtifacts artifacts: 'iac/results/**', fingerprint: true
       }
       
       post {
         always {
-          junit allowEmptyResults: true, testResults: 'iac/results/results.xml'
+          junit allowEmptyResults: true, testResults: 'iac/results/**/*.xml'
         }
       }
     }
