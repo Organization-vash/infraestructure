@@ -31,7 +31,13 @@ services:
     image: docker:dind
     privileged: true
     container_name: docker-agent
-    command: dockerd --host=tcp://0.0.0.0:50000 --tls=false --dns 172.18.0.1
+    command: >
+      sh -c "
+        dockerd --host=tcp://0.0.0.0:50000 --tls=false --dns 172.18.0.1 &
+        sleep 5 &&
+        docker network create jenkins-network &&
+        wait
+      "
     networks:
       - jenkins-network
 

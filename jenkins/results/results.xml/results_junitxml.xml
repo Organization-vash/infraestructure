@@ -126,39 +126,39 @@
 		<testcase name="[NONE][CKV2_AWS_77] Ensure AWS API Gateway Rest API attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability" classname="/api_gateway.tf.aws_apigatewayv2_api.main_api" file="/api_gateway.tf"/>
 		<testcase name="[NONE][CKV2_AWS_56] Ensure AWS Managed IAMFullAccess IAM policy is not used." classname="/iam_roles.tf.aws_iam_role.lambda_role" file="/iam_roles.tf"/>
 		<testcase name="[NONE][CKV2_AWS_56] Ensure AWS Managed IAMFullAccess IAM policy is not used." classname="/iam_roles.tf.aws_iam_role_policy_attachment.lambda_rds_access" file="/iam_roles.tf"/>
+		<testcase name="[NONE][CKV2_AWS_54] Ensure AWS CloudFront distribution is using secure SSL protocols for HTTPS communication" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf"/>
+		<testcase name="[NONE][CKV_AWS_20] S3 Bucket has an ACL defined which allows public READ access." classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
+		<testcase name="[NONE][CKV_AWS_20] S3 Bucket has an ACL defined which allows public READ access." classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
 		<testcase name="[NONE][CKV2_AWS_6] Ensure that S3 bucket has a Public Access block" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
 		<testcase name="[NONE][CKV2_AWS_35] AWS NAT Gateways should be utilized for the default route" classname="/network.tf.aws_route_table.nat_subnet_rt" file="/network.tf"/>
 		<testcase name="[NONE][CKV2_AWS_35] AWS NAT Gateways should be utilized for the default route" classname="/network.tf.aws_route_table.private_no_nat_rt" file="/network.tf"/>
 		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/iam_roles.tf.aws_iam_role_policy.lambda_logs_policy" file="/iam_roles.tf"/>
 		<testcase name="[NONE][CKV2_AWS_40] Ensure AWS IAM policy does not allow full IAM privileges" classname="/iam_roles.tf.aws_iam_role_policy.lambda_vpc_permissions" file="/iam_roles.tf"/>
-		<testcase name="[NONE][CKV_AWS_20] S3 Bucket has an ACL defined which allows public READ access." classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
-		<testcase name="[NONE][CKV_AWS_20] S3 Bucket has an ACL defined which allows public READ access." classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
-		<testcase name="[NONE][CKV2_AWS_54] Ensure AWS CloudFront distribution is using secure SSL protocols for HTTPS communication" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf"/>
-		<testcase name="[NONE][CKV2_AWS_30] Ensure Postgres RDS as aws_db_instance has Query Logging enabled" classname="/rds.tf.aws_db_instance.postgres" file="/rds.tf"/>
 		<testcase name="[NONE][CKV2_AWS_46] Ensure AWS CloudFront Distribution with S3 have Origin Access set to enabled" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf"/>
 		<testcase name="[NONE][CKV_AWS_57] S3 Bucket has an ACL defined which allows public WRITE access." classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
 		<testcase name="[NONE][CKV_AWS_57] S3 Bucket has an ACL defined which allows public WRITE access." classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
-		<testcase name="[NONE][CKV_AWS_19] Ensure all data stored in the S3 bucket is securely encrypted at rest" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
-		<testcase name="[NONE][CKV_AWS_19] Ensure all data stored in the S3 bucket is securely encrypted at rest" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
-		<testcase name="[NONE][CKV_AWS_145] Ensure that S3 buckets are encrypted with KMS by default" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
 		<testcase name="[NONE][CKV2_AWS_62] Ensure S3 buckets should have event notifications enabled" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
 		<testcase name="[NONE][CKV2_AWS_62] Ensure S3 buckets should have event notifications enabled" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
 		<testcase name="[NONE][CKV2_AWS_60] Ensure RDS instance with copy tags to snapshots is enabled" classname="/rds.tf.aws_db_instance.postgres" file="/rds.tf"/>
 		<testcase name="[NONE][CKV2_AWS_44] Ensure AWS route table with VPC peering does not contain routes overly permissive to all traffic" classname="/network.tf.aws_route_table.nat_subnet_rt" file="/network.tf"/>
 		<testcase name="[NONE][CKV2_AWS_44] Ensure AWS route table with VPC peering does not contain routes overly permissive to all traffic" classname="/network.tf.aws_route_table.private_no_nat_rt" file="/network.tf"/>
 		<testcase name="[NONE][CKV2_AWS_72] Ensure AWS CloudFront origin protocol policy enforces HTTPS-only" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf"/>
-		<testcase name="[NONE][CKV2_AWS_51] Ensure AWS API Gateway endpoints uses client certificate authentication" classname="/api_gateway.tf.aws_apigatewayv2_stage.default_stage" file="/api_gateway.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/lambda_agency.tf.aws_lambda_function.agency_lambda" file="/lambda_agency.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/lambda_code.tf.aws_lambda_function.code_lambda" file="/lambda_code.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/lambda_modules.tf.aws_lambda_function.module_lambda" file="/lambda_modules.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/lambda_services.tf.aws_lambda_function.service_lambda" file="/lambda_services.tf"/>
 		<testcase name="[NONE][CKV2_AWS_75] Ensure no open CORS policy" classname="/lambda_users.tf.aws_lambda_function.user_lambda" file="/lambda_users.tf"/>
+		<testcase name="[NONE][CKV_AWS_19] Ensure all data stored in the S3 bucket is securely encrypted at rest" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
+		<testcase name="[NONE][CKV_AWS_19] Ensure all data stored in the S3 bucket is securely encrypted at rest" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
+		<testcase name="[NONE][CKV_AWS_145] Ensure that S3 buckets are encrypted with KMS by default" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
+		<testcase name="[NONE][CKV2_AWS_30] Ensure Postgres RDS as aws_db_instance has Query Logging enabled" classname="/rds.tf.aws_db_instance.postgres" file="/rds.tf"/>
+		<testcase name="[NONE][CKV2_AWS_51] Ensure AWS API Gateway endpoints uses client certificate authentication" classname="/api_gateway.tf.aws_apigatewayv2_stage.default_stage" file="/api_gateway.tf"/>
 		<testcase name="[NONE][CKV2_AWS_32] Ensure CloudFront distribution has a response headers policy attached" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf"/>
-		<testcase name="[NONE][CKV2_AWS_12] Ensure the default security group of every VPC restricts all traffic" classname="/network.tf.aws_vpc.main" file="/network.tf"/>
 		<testcase name="[NONE][CKV2_AWS_61] Ensure that an S3 bucket has a lifecycle configuration" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
 		<testcase name="[NONE][CKV2_AWS_61] Ensure that an S3 bucket has a lifecycle configuration" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
 		<testcase name="[NONE][CKV_AWS_21] Ensure all data stored in the S3 bucket have versioning enabled" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf"/>
 		<testcase name="[NONE][CKV_AWS_21] Ensure all data stored in the S3 bucket have versioning enabled" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf"/>
+		<testcase name="[NONE][CKV2_AWS_12] Ensure the default security group of every VPC restricts all traffic" classname="/network.tf.aws_vpc.main" file="/network.tf"/>
 		<testcase name="[NONE][CKV_AWS_158] Ensure that CloudWatch Log Group is encrypted by KMS" classname="/api_gateway.tf.aws_cloudwatch_log_group.apigw_logs" file="/api_gateway.tf">
 			<skipped type="skipped" message="No comment provided"/>
 		</testcase>
@@ -294,20 +294,20 @@
 		<testcase name="[NONE][CKV2_AWS_47] Ensure AWS CloudFront attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf">
 			<skipped type="skipped" message="ya se incluyó la regla AWSManagedRulesLog4jRuleSet en la WAF asociada"/>
 		</testcase>
+		<testcase name="[NONE][CKV2_AWS_42] Ensure AWS CloudFront distribution uses custom SSL certificate" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf">
+			<skipped type="skipped" message="No tenemos dominio."/>
+		</testcase>
 		<testcase name="[NONE][CKV_AWS_145] Ensure that S3 buckets are encrypted with KMS by default" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf">
 			<skipped type="skipped" message=" No requiere cifrado en entorno de desarrollo"/>
 		</testcase>
-		<testcase name="[NONE][CKV2_AWS_42] Ensure AWS CloudFront distribution uses custom SSL certificate" classname="/cloudfront.tf.aws_cloudfront_distribution.frontend_distribution" file="/cloudfront.tf">
-			<skipped type="skipped" message="No tenemos dominio."/>
+		<testcase name="[NONE][CKV2_AWS_69] Ensure AWS RDS database instance configured with encryption in transit" classname="/rds.tf.aws_db_instance.postgres" file="/rds.tf">
+			<skipped type="skipped" message="No comment provided"/>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_144] Ensure that S3 bucket has cross-region replication enabled" classname="/s3.tf.aws_s3_bucket.frontend" file="/s3.tf">
 			<skipped type="skipped" message="No necesitamos un bucket destino en otra región."/>
 		</testcase>
 		<testcase name="[NONE][CKV_AWS_144] Ensure that S3 bucket has cross-region replication enabled" classname="/s3_lambdas.tf.aws_s3_bucket.lambda_bucket" file="/s3_lambdas.tf">
 			<skipped type="skipped" message="No necesitamos un bucket destino en otra región."/>
-		</testcase>
-		<testcase name="[NONE][CKV2_AWS_69] Ensure AWS RDS database instance configured with encryption in transit" classname="/rds.tf.aws_db_instance.postgres" file="/rds.tf">
-			<skipped type="skipped" message="No comment provided"/>
 		</testcase>
 	</testsuite>
 </testsuites>
