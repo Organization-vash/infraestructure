@@ -29,12 +29,12 @@ pipeline {
             --output-file-path results/results_junitxml.xml
           '''
         }
-        archiveArtifacts artifacts: 'results/results.xml', fingerprint: true
+        archiveArtifacts artifacts: 'iac/results/results.xml', fingerprint: true
       }
       
       post {
         always {
-          junit 'results/results.xml'
+          junit 'iac/results/results.xml'
         }
       }
     }
