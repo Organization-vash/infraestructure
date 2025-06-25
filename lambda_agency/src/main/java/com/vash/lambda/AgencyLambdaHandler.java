@@ -5,7 +5,6 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vash.db.DatabaseInitializer;
 import com.vash.lambda.model.AgencyDTO;
 import com.vash.lambda.service.AgencyServiceLambda;
 
@@ -15,17 +14,18 @@ import java.util.HashMap;
 
 public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    static {
-        try {
-            System.out.println("Conectado a la base de datos (agencies)");
-            DatabaseInitializer.initAgencyTable();
-        } catch (Exception e) {
-            System.err.println("Error al conectarse a la base de datos (agencies): " + e.getMessage());
-        }
-    }
-    
-    private final AgencyServiceLambda service = new AgencyServiceLambda();
+    private final AgencyServiceLambda service;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    // Constructor de producción (se conecta a BD)
+    public AgencyLambdaHandler() {
+        this.service = new AgencyServiceLambda();
+    }
+
+    // Constructor para test (con servicio mockeado)
+    public AgencyLambdaHandler(AgencyServiceLambda service) {
+        this.service = service;
+    }
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
@@ -108,14 +108,17 @@ public class AgencyLambdaHandler implements RequestHandler<APIGatewayProxyReques
     }
 
     private void log(String level, String message, Context context, Map<String, Object> extra) {
-        Map<String, Object> log = new HashMap<>();
-        log.put("timestamp", System.currentTimeMillis());
-        log.put("level", level);
-        log.put("function", context.getFunctionName());
-        log.put("requestId", context.getAwsRequestId());
-        log.put("message", message);
-        if (extra != null)
-            log.putAll(extra);
-        System.out.println(new ObjectMapper().valueToTree(log));
+        try {
+            Map<String, Object> log = new HashMap<>();
+            log.put("timestamp", System.currentTimeMillis());
+            log.put("level", level);
+            log.put("function", context.getFunctionName());
+            log.put("requestId", context.getAwsRequestId());
+            log.put("message", message);
+            if (extra != null)
+                log.putAll(extra);
+            System.out.println(objectMapper.writeValueAsString(log));
+        } catch (Exception ignored) {
+        }
     }
 }
