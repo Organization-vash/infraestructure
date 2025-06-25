@@ -24,9 +24,9 @@ pipeline {
           sh '''
             mkdir -p results
             checkov -d . \
-            --skip-check CKV_AWS_309 \
-            -o junitxml \
-            --output-file-path results/results_junitxml.xml
+              --skip-check CKV_AWS_309 \
+              -o junitxml \
+              --output-file-path results/results.xml
           '''
         }
         archiveArtifacts artifacts: 'iac/results/results.xml', fingerprint: true
@@ -34,7 +34,7 @@ pipeline {
       
       post {
         always {
-          junit 'iac/results/results.xml'
+          junit allowEmptyResults: true, testResults: 'iac/results/results.xml'
         }
       }
     }
