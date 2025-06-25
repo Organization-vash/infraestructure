@@ -35,21 +35,6 @@ services:
     networks:
       - jenkins-network
 
-  checkov:
-    image: bridgecrew/checkov:latest
-    container_name: checkov
-    networks:
-      - jenkins-network
-    volumes:
-      - ../iac:/app
-      - ./results:/output
-    working_dir: /app
-    command: >
-      --directory /app
-      -o junitxml
-      --output-file-path /output/results.xml
-      --skip-check CKV_AWS_309
-
 networks:
   jenkins-network:
 

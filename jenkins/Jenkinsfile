@@ -18,14 +18,14 @@ pipeline {
       }
     }
 
-  stage('Checkov Scan') {
-          steps {
-            dir('checkov') {
-              sh 'mkdir -p results'
-              sh 'docker compose run --rm checkov'
-            }
-          }
+    stage('Checkov Scan') {
+      steps {
+        dir('checkov') {
+          sh 'mkdir -p results'
+          sh 'docker compose run --rm checkov'
         }
+      }
+    }
     stage('Build Java Lambdas') {
       steps {
         dir('lambda_agency') {
