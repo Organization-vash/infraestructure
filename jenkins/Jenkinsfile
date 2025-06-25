@@ -21,9 +21,21 @@ pipeline {
     stage('Checkov Scan') {
       steps {
         dir('iac') {
-          sh "checkov -d . --skip-check CKV_AWS_309"
+          '''
+          mkdir -p results
+          sh "checkov -d . \
+          --skip-check CKV_AWS_309" \
+          -o results_junitxml \
+          --output-file-path results/results_junitxml.xml
+          '''
         }
       }
+      post {
+      always {
+      junit allowEmptyResults: true,
+            testResults: 'iac/results/results_junitxml.xml'
+    }
+  }
     }
 
     stage('Build Java Lambdas') {
@@ -133,10 +145,5 @@ pipeline {
       }
     }
   }
-    post {
-      always {
-      junit allowEmptyResults: true,
-            testResults: 'checkov/results/results_junitxml.xml'
-    }
-  }
+    
 }
