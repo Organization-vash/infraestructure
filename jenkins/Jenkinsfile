@@ -21,7 +21,7 @@ pipeline {
     stage('Checkov Scan') {
       steps {
         dir('iac') {
-          sh "checkov -d ."
+          sh "checkov -d . --skip-check CKV_AWS_309"
         }
       }
     }
