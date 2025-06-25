@@ -21,12 +21,7 @@ pipeline {
     stage('Checkov Scan') {
       steps {
         dir('iac') {
-          sh "checkov -d ./iac/"
-        }
-      }
-      post {
-        failure {
-          echo 'No encontró la carpeta'
+          sh "checkov -d ."
         }
       }
     }
