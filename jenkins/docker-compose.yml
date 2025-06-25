@@ -38,7 +38,8 @@ services:
   checkov:
     image: bridgecrew/checkov:latest
     container_name: checkov
-    network_mode: host
+    networks:
+      - jenkins-network
     volumes:
       - ../iac:/app
       - ./results:/output
