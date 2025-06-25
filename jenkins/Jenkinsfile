@@ -21,22 +21,24 @@ pipeline {
     stage('Checkov Scan') {
       steps {
         dir('iac') {
-          '''
-          mkdir -p results
-          sh "checkov -d . \
-          --skip-check CKV_AWS_309" \
-          -o results_junitxml \
-          --output-file-path results/results_junitxml.xml
+          sh '''
+            mkdir -p results
+            checkov -d . \
+            --skip-check CKV_AWS_309 \
+            -o junitxml \
+            --output-file-path results/results_junitxml.xml
           '''
         }
+        archiveArtifacts artifacts: 'iac/results/checkov.log,iac/results/results_junitxml.xml', fingerprint: true
       }
+      
       post {
-      always {
-      junit allowEmptyResults: true,
-            testResults: 'iac/results/results_junitxml.xml'
+        always {
+          junit allowEmptyResults: true, testResults: 'iac/results/results_junitxml.xml'
+        }
+      }
     }
-  }
-    }
+
 
     stage('Build Java Lambdas') {
       steps {
