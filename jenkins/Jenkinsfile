@@ -29,6 +29,7 @@ pipeline {
               --output-file-path results/results.xml
           '''
         }
+        sh 'ls -l iac/results'
         archiveArtifacts artifacts: 'iac/results/results.xml', fingerprint: true
       }
       
