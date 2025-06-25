@@ -3,7 +3,6 @@ FROM jenkins/inbound-agent:latest-jdk17
 USER root
 
 RUN apt-get update && apt-get install -y \
-    docker.io \
     unzip \
     curl \
     git \
@@ -14,8 +13,6 @@ RUN apt-get update && apt-get install -y \
     jq \
     sudo \
  && rm -rf /var/lib/apt/lists/*
-
-RUN usermod -aG docker jenkins
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
  && unzip awscliv2.zip \
@@ -37,11 +34,7 @@ RUN curl -fsSL \
     | tar -xz -C /opt/ \
  && ln -s /opt/apache-maven-3.9.6 /opt/maven
 
-RUN mkdir -p /usr/local/lib/docker/cli-plugins \
- && curl -SL \
-    https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64 \
-    -o /usr/local/lib/docker/cli-plugins/docker-compose \
- && chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+RUN pip install checkov --break-system-packages
 
 ENV MAVEN_HOME=/opt/maven
 ENV PATH="$MAVEN_HOME/bin:$PATH"

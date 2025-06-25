@@ -20,12 +20,17 @@ pipeline {
 
     stage('Checkov Scan') {
       steps {
-        dir('checkov') {
-          sh 'mkdir -p results'
-          sh 'docker compose run --rm checkov'
+        dir(iac) {
+          sh "checkov -d ./iac/"
+        }
+      }
+      post {
+        failure {
+          echo 'No encontró la carpeta'
         }
       }
     }
+
     stage('Build Java Lambdas') {
       steps {
         dir('lambda_agency') {
