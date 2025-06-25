@@ -29,12 +29,12 @@ pipeline {
             --output-file-path results/results_junitxml.xml
           '''
         }
-        archiveArtifacts artifacts: 'checkov/results/results.xml', fingerprint: true
+        archiveArtifacts artifacts: 'results/results.xml', fingerprint: true
       }
       
       post {
         always {
-          junit 'checkov/results/results.xml'
+          junit 'results/results.xml'
         }
       }
     }
