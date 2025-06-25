@@ -1,0 +1,2 @@
+skip-check:
+  CKV_AWS_309: "Se omite porque esta política solo está disponible en Prisma Cloud v3.2.446, no en Checkov OSS"
