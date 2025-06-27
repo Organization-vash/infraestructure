@@ -22,26 +22,14 @@ pipeline {
       steps {
         dir('iac') {
           sh '''
-            mkdir -p results
             checkov -d . \
               --skip-check CKV_AWS_309 \
               -o junitxml \
               --output-file-path results/results.xml
-            mkdir -p /checkov-results/${BUILD_NUMBER}
-            cp results/results.xml /checkov-results/${BUILD_NUMBER}/
           '''
-          sh 'ls -R results'
-        }
-        archiveArtifacts artifacts: 'iac/results/**', fingerprint: true
-      }
-      
-      post {
-        always {
-          junit allowEmptyResults: true, testResults: 'iac/results/**/*.xml'
         }
       }
     }
-
 
     stage('Build Java Lambdas') {
       steps {
