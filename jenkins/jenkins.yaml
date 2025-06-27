@@ -39,8 +39,7 @@ jenkins:
                 user: "jenkins"
             dockerTemplateBase:
               image: chex19/agent-jenkins:latest
-              volumes:
-                - "/home/chex/IaC/infraestructure/checkov-results:/checkov-results:rw"
+              mountsString: "/home/chex/IaC/infraestructure/checkov-results:/checkov-results:rw"
               dnsHosts:
                 - "8.8.8.8"
               extraHosts:
