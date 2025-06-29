@@ -27,6 +27,7 @@ pipeline {
               -o junitxml \
               --output-file-path results/results.xml
           '''
+        }
       }
     }
 
