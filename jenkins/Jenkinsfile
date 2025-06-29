@@ -10,9 +10,29 @@ pipeline {
   }
 
   stages {
-    stage('Checkout') {
+    stage('Checkout Tests') {
       steps {
-        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/jenkins'
+        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/tests'
+      }
+    }
+
+    stage('Test Java Lambdas') {
+      steps {
+        dir('lambda_agency') {
+          sh 'mvn test'
+        }
+        dir('lambda_code') {
+          sh 'mvn test'
+        }
+        dir('lambda_modules') {
+          sh 'mvn test'
+        }
+        dir('lambda_services') {
+          sh 'mvn test'
+        }
+        dir('lambda_users') {
+          sh 'mvn test'
+        }
       }
     }
 
