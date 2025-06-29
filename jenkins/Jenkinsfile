@@ -27,6 +27,11 @@ pipeline {
               -o junitxml \
               --output-file-path results/results.xml
           '''
+      }
+    }
+
+    stage('Checkout Tests') {
+      steps {
         git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/tests'
       }
     }
@@ -48,6 +53,12 @@ pipeline {
         dir('lambda_users') {
           sh 'mvn test'
         }
+      }
+    }
+
+    stage('Checkout Tests') {
+      steps {
+        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/jenkins'
       }
     }
 
