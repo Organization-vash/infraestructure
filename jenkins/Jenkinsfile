@@ -12,7 +12,7 @@ pipeline {
   }
 
   stages {
-    stage('Checkout Tests') {
+    stage('Checkout Checkov') {
       steps {
         git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/checkov'
       }
@@ -57,7 +57,7 @@ pipeline {
       }
     }
 
-    stage('Checkout Tests') {
+    stage('Checkout Build') {
       steps {
         git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/jenkins'
       }
@@ -170,5 +170,4 @@ pipeline {
       }
     }
   }
-    
 }
