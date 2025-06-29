@@ -2,3 +2,4 @@
 .vscode/
 iac/.terraform.tfstate.lock.info
 iac/NUL
+jenkins/results/results.xml/results_junitxml.xml

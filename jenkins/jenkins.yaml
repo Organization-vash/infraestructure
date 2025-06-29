@@ -38,7 +38,7 @@ jenkins:
               jnlp:
                 user: "jenkins"
             dockerTemplateBase:
-              image: chex19/jenkins-agent:lts-custom
+              image: chex19/agent-jenkins:latest
               dnsHosts:
                 - "8.8.8.8"
               extraHosts:

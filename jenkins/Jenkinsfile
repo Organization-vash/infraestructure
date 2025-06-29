@@ -2,16 +2,31 @@ pipeline {
   agent { label 'entel' }
 
   environment {
-    AWS_REGION = "us-east-1"
-    TF_DIR = "iac"
+    AWS_REGION          = "us-east-1"
+    TF_DIR              = "iac"
 
-    AWS_CREDENTIALS = credentials('aws-credentials')
-    AWS_SESSION_TOKEN = credentials('aws-session-token')
+    AWS_CREDENTIALS     = credentials('aws-credentials')
+    AWS_SESSION_TOKEN   = credentials('aws-session-token')
+
+    DOCKER_HOST         = "tcp://docker-agent:50000"
   }
 
   stages {
     stage('Checkout Tests') {
       steps {
+        git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/checkov'
+      }
+    }
+
+    stage('Checkov Scan') {
+      steps {
+        dir('iac') {
+          sh '''
+            checkov -d . \
+              --skip-check CKV_AWS_309 \
+              -o junitxml \
+              --output-file-path results/results.xml
+          '''
         git url: 'https://github.com/Organization-vash/infraestructure.git', branch: 'feature/tests'
       }
     }
@@ -55,7 +70,7 @@ pipeline {
         }
       }
     }
-
+    
     stage('Terraform Init & Apply') {
       steps {
         dir("${env.TF_DIR}") {
@@ -143,4 +158,5 @@ pipeline {
       }
     }
   }
+    
 }

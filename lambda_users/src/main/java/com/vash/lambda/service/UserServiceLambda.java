@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserServiceLambda {
-
     public List<UserDTO> getAll() {
         List<UserDTO> userList = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection();

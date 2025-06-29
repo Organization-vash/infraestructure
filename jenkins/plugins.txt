@@ -9,3 +9,4 @@ credentials
 credentials-binding
 job-dsl
 ssh-slaves
+junit
