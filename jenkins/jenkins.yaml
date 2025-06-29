@@ -81,7 +81,7 @@ jobs:
                         remote {
                           url('https://github.com/Organization-vash/infraestructure.git')
                         }
-                        branches('feature/checkov')
+                        branches('feature/tests')
                       }
                       scriptPath('jenkins/Jenkinsfile')
                     }
