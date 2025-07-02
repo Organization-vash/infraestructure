@@ -67,12 +67,12 @@ credentials:
 
 jobs:
   - script: >
-      freeStyleJob('seed-job') {
+      freeStyleJob('seed-freeStyleJob') {
         description('Job que ejecuta el DSL para crear los demás pipelines')
         steps {
           dsl {
             text("""
-              pipelineJob('entel-ci-pipeline') {
+              pipelineJob('entel-pipeline') {
                 description('Pipeline CI/CD para el proyecto Entel (Java Lambdas, Terraform, Angular Frontend)')
                 definition {
                   cpsScm {

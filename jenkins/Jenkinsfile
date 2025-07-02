@@ -7,8 +7,6 @@ pipeline {
 
     AWS_CREDENTIALS     = credentials('aws-credentials')
     AWS_SESSION_TOKEN   = credentials('aws-session-token')
-
-    DOCKER_HOST         = "tcp://docker-agent:50000"
   }
 
   stages {
